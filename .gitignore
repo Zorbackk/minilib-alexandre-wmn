@@ -7,7 +7,7 @@
 
 
 # Dépendances locales
-node_modules
+**/node_modules
 
 # Fichiers système
 
