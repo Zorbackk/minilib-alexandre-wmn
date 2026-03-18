@@ -1,0 +1,20 @@
+# Variables d'environnement (NE JAMAIS COMMITER)
+.env
+.env.*
+
+# pas .env.example qui sert de référence
+!.env.example
+
+
+# Dépendances locales
+node_modules/
+
+# Fichiers système
+
+.DS_Store
+Thumbs.db
+
+# Fichiers de configuration IDE
+
+.idea/
+.vscode/settings.json
