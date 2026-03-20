@@ -4,7 +4,7 @@
 
 import express from 'express';
 const router = express.Router();
-import * as controller from '../controllers/livresControllers'
+import * as controller from '../controllers/livresControllers.js'
 
 // GET /api/v1/livres → liste tous les livres (+ filtres query params)
 router.get('/', controller.getLivres);
