@@ -40,9 +40,23 @@ const getLivreById = (req, res) => {
 };
 
 /**
+* Rechercher un livre par auteur ou titre ou mot présent dans l'un ou l'autre
+* GET api/v1/livres/recherche?q=
+* @param {import('express').Request} req
+* @param {import('express').Response} res
+*/
+const rechercherLivres = (req, res) => {
+  const { q } = req.query;
+  if (!q) return res.status(400).json({ erreur: 'Paramètre q requis'});
+  const resultats = livresModel.findAll({ recherche : q});
+  res.json({ query: q, total: resultats.length, resultats});
+};
+
+/**
 * Crée un nouveau livre.
 * POST /api/v1/livres
 * Body JSON attendu : { isbn, titre, auteur, annee, genre }
+* Logique de vérification déportée dans validateLivre.js
 *
 * @param {import('express').Request} req
 * @param {import('express').Response} res
@@ -51,21 +65,7 @@ const createLivre = (req, res) => {
   
   const { isbn, titre, auteur, annee, genre } = req.body;
 
-  // Validation des champs obligatoires 
-const champsManquants = [];
-if (!isbn) champsManquants.push('isbn');
-if (!titre) champsManquants.push('titre');
-if (!auteur) champsManquants.push('auteur');
-
-if (champsManquants.length > 0) {
-  // 400 Bad Request - données invalides envoyées par le client
-  return res.status(400).json({
-    erreur: 'Champs obligatoires manquants',
-    champs: champsManquants,
-  });
-}
-
-const nouveau = livresModel.create({ isbn, titre, auteur, annee, genre});
+  const nouveau = livresModel.create({ isbn, titre, auteur, annee, genre});
 // 201 Created - ressource crée avec succès
 res.status(201).json(nouveau)
 };
@@ -102,4 +102,4 @@ const deleteLivre = (req, res) => {
   res.status(204).send();
 };
 
-export { getLivres, getLivreById, createLivre, updateLivre, deleteLivre }
+export { getLivres, getLivreById, rechercherLivres, createLivre, updateLivre, deleteLivre }
