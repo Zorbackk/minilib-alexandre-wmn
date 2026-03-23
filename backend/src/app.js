@@ -32,7 +32,7 @@ app.use((req, res, next) => {
 app.use('/api/v1/livres', livresRouter);
 
 // Route de santé - permet de vérifier que le serveur tourne
-app.get('/health', (req, res) => {
+app.get('/api/v1/health', (req, res) => {
   res.json({
     status: 'OK',
     message: 'Serveur MiniLib opérationnel',
