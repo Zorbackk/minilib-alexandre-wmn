@@ -17,10 +17,10 @@ CREATE TABLE livres (
   annee INTEGER CHECK(annee > 0 AND annee <= EXTRACT(YEAR FROM NOW())),
   genre VARCHAR(100),
   disponible BOOLEAN NOT NULL DEFAULT TRUE
-)
+);
 
 -- Table adhérents
-CREATE TABLE adherents(
+CREATE TABLE adherents (
   id SERIAL PRIMARY KEY,
   numero_adherent VARCHAR(20) UNIQUE NOT NULL,
   nom VARCHAR(100) NOT NULL,
@@ -28,15 +28,21 @@ CREATE TABLE adherents(
   email VARCHAR(255) UNIQUE NOT NULL,
   actif BOOLEAN NOT NULL DEFAULT TRUE,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-)
+);
 
 -- Table emprunts
-CREATE TABLE emprunts(
+CREATE TABLE emprunts (
   id SERIAL PRIMARY KEY,
   livre_id INTEGER NOT NULL REFERENCES livres(id),
-  adherent_id INTEGER NOT NULL REFERENCES adherent(id)
+  adherent_id INTEGER NOT NULL REFERENCES adherents(id),
   date_emprunt DATE NOT NULL DEFAULT CURRENT_DATE,
   date_retour_prevue DATE NOT NULL,
   date_retour_effective DATE, -- NULL = pas encore rendu
   CONSTRAINT chk_dates CHECK (date_retour_prevue >= date_emprunt)
-)
+);
+
+-- Index pour accélérer les recherches fréquentes 
+CREATE INDEX idx_livres_titres ON livres(titre);
+CREATE INDEX idx_livres_auteur ON livres(auteur);
+CREATE INDEX idx_adherents_email ON adherents(email);
+CREATE INDEX idx_emprunts_actifs ON emprunts(adherent_id) WHERE date_retour_effective IS NULL;
