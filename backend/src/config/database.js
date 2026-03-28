@@ -1,5 +1,5 @@
 /**
-* Pool de connextions PostgreSQL partagé dans toute l'application
+* Pool de connexions PostgreSQL partagé dans toute l'application
 * Chargé via Node 24 : node --env-file=.env src/app.js
 * @module database
 */
