@@ -1,96 +1,107 @@
-// backend/src/models/livresModel.js
+// backend/src/controllers/livresController.js — version async + PostgreSQL
+// Controller pour les livres — logique métier entre les routes et les données
+
+import * as livresModel from '../models/livresData.js'
 
 /**
-* Accès aux données livres via PostgreSQL
-* Remplace l'ancien livresData.js (placé maintenant dans archives/)
-* Toutes les fonctions sont async - elles retournent des Promises.
-* 
-* @module livresModel
+* Récupère tous les livres avec filtres optionnels via query params.
+* GET /api/v1/livres?genre=Informatique&disponible=true&recherche=clean
+*
+* @param {import('express').Request} req - Requête Express
+* @param {import('express').Response} res - Réponse Express
 */
-
-import pool from '../config/database.js'
-
-/** 
-* 
-* @async
-* @param {Object} [filtres={}]
-* @param {string} [filtres.genre]
-* @param {boolean} [filtres.disponible]
-* @param {string} [filtres.recherche] - Recherche dans titre ou auteur (ILIKE)
-* @returns {Promise<Array>} Tableau de livres
-*/
-
-export const findAll = async (filtres = {}) => {
-  const conditions = []; // tableau des morceaux WHERE : ["genre" = $1, "disponible" = $2]
-  const valeurs = []; // tableau des valeurs réelles : [ROMAN, TRUE]
-  let idx = 1; // compteur pour numéroter les paramètres $1, $2, etc...
-
-  if (filtres.genre !== undefined) {
-    conditions.push(`genre = $${idx++}`); // double $ : 1er = template literal JS 2nd = PostgreSQL
-    valeurs.push(filtres.genre);
+const getLivres = async (req, res) => {
+  try {
+    // req.query contient les paramètres de l'URL (?genre=...&disponible=...)
+    const { genre, disponible, recherche } = req.query;
+    const livres = await livresModel.findAll({ genre, disponible, recherche});
+    res.json(livres); // 200 OK implicite
+  } catch (error) {
+    // Logger erreur côté serveur
+    console.error(error)
+    res.status(500).json({ erreur: 'Erreur lors de la récupération des livres'});
   }
-  if (filtres.disponible !== undefined) {
-    conditions.push(`disponible = $${idx++}`);
-    valeurs.push(filtres.disponible === 'true');
-  }
-  if (filtres.recherche) {
-    conditions.push(`(titre ILIKE $${idx} OR auteur ILIKE $${idx})`);
-    valeurs.push(`%${filtres.recherche}%`); // %...% est wildcard PostgreSQL : %harry% matche "Harry Potter"
-    idx++;
-  }
-
-  const where = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '';
-  const result = await pool.query(`SELECT * FROM livres ${where} ORDER BY titre`, valeurs);
-
-  return result.rows;
 };
 
-/** 
-* Trouve un livre par son id.
-* @async
-* @param {number} id
-* @return {Promise<Object|null>} Livre ou null
- */
-export const findById = async (id) => {
-  const result = await pool.query('SELECT * FROM livres WHERE id = $1, [id]');
-  return result.rows[0] | null;
-}
-
-/** 
-* Crée un nouveau livre.
-* @async
-* @param {Object} data - {isbn, titre, auteur, annee, genre} 
-* @return {Promise<Object>} Le livre créé avec son id
+/**
+* Récupère un livre par son id.
+* GET /api/v1/livres/:id
+*
+* @param {import('express').Request} req
+* @param {import('express').Response} res
 */
-export const create = async ({ isbn, titre, auteur, annee, genre }) => {
-  const result = await pool.query(
-    `INSERT INTO livres (isbn, titre, auteur, annee, genre)
-    VALUES ($1, $2, $3, $4, $5) RETURNING *`, 
-    [isbn, titre, auteur, annee, genre]
-    // RETURNING * retourne la ligne insérée - y compris l'id généré par SERIAL
-  );
-  return result.rows[0];
-}
+const getLivreById = async (req, res) => {
+  const livre = await livresModel.findById(req.params.id);
+  if (!livre) {
+    // 404 Not Found - Ressource inexistante
+    return res.status(404).json({ erreur: `Livre id:${req.params.id} non trouvé`});
+  }
+  res.json(livre)
+};
 
-/** 
-* Met à jour un livre
-* @async
-* @param {number} id
-* @param {Object} data - Champs à modifier
-* @returns {Promise<Object|null>} Livre mis à jour ou null
+/**
+* Rechercher un livre par auteur ou titre ou mot présent dans l'un ou l'autre
+* GET api/v1/livres/recherche?q=
+* @param {import('express').Request} req
+* @param {import('express').Response} res
+*/
+const rechercherLivres = (req, res) => {
+  const { q } = req.query;
+  if (!q) return res.status(400).json({ erreur: 'Paramètre q requis'});
+  const resultats = livresModel.findAll({ recherche : q});
+  res.json({ query: q, total: resultats.length, resultats});
+};
+
+/**
+* Crée un nouveau livre.
+* POST /api/v1/livres
+* Body JSON attendu : { isbn, titre, auteur, annee, genre }
+* Logique de vérification déportée dans validateLivre.js
+*
+* @param {import('express').Request} req
+* @param {import('express').Response} res
  */
+const createLivre = async (req, res) => {
+  
+  const { isbn, titre, auteur, annee, genre } = req.body;
+  const manquants = ['isbn', 'titre', 'auteur'].filter(k => !req.body[k]);
+  if (manquants.length > 0) 
+    return res.status(400).json({erreur: 'Champs manquants', champs: manquants})
+  const nouveau = await livresModel.create({ isbn, titre, auteur, annee, genre});
+// 201 Created - ressource crée avec succès
+res.status(201).json(nouveau)
+};
 
-export const update = async (id, data) => {
-  // Construction dynamique du SET
-  const champs = Object.keys(data);
-  const valeurs = Object.values(data);
-  if (champs.length === 0) return findById(id);
+/**
+* Met à jour un livre existant.
+* PUT /api/v1/livres/:id
+*
+* @param {import('express').Request} req
+* @param {import('express').Response} res
+*/
+const updateLivre = async (req, res) => {
+  const misAJour = await livresModel.update(req.params.id, req.body);
+  if (!misAJour) {
+    return res.status(404).json({ erreur: `Livre id:${req.params.id} non trouvé`})
+  }
+  res.json(misAJour)
+};
 
-  const setClause = champs.map((c, i) => `${c} = $${i + 1}`).join(', ');
-  const result = await pool.query(
-    `UPDATE livres SET ${setClause} WHERE id = $${champs.length + 1}
-    RETURNING *`,
-    [...valeurs, id]
-  );
-  return result.rows[0] || null;
-}
+/**
+* Supprime un livre.
+* DELETE /api/v1/livres/:id
+*
+* @param {import('express').Request} req
+* @param {import('express').Response} res
+*/
+
+const deleteLivre = async (req, res) => {
+  const supprimé = await livresModel.remove(req.params.id);
+  if (!supprimé) {
+    return res.status(404).json({ erreur: `Livre id:${req.params.id} non trouvé`});
+  }
+  // 204 No Content - succès sans corps de réponse
+  res.status(204).send();
+};
+
+export { getLivres, getLivreById, rechercherLivres, createLivre, updateLivre, deleteLivre }
