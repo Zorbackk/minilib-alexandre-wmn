@@ -45,10 +45,10 @@ const getLivreById = async (req, res) => {
 * @param {import('express').Request} req
 * @param {import('express').Response} res
 */
-const rechercherLivres = (req, res) => {
+const rechercherLivres = async (req, res) => {
   const { q } = req.query;
   if (!q) return res.status(400).json({ erreur: 'Paramètre q requis'});
-  const resultats = livresModel.findAll({ recherche : q});
+  const resultats = await livresModel.findAll({ recherche : q});
   res.json({ query: q, total: resultats.length, resultats});
 };
 

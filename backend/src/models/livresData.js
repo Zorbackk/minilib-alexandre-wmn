@@ -52,9 +52,9 @@ export const findAll = async (filtres = {}) => {
 * @return {Promise<Object|null>} Livre ou null
  */
 export const findById = async (id) => {
-  const result = await pool.query('SELECT * FROM livres WHERE id = $1, [id]');
-  return result.rows[0] | null;
-}
+  const result = await pool.query('SELECT * FROM livres WHERE id = $1', [id]);
+  return result.rows[0] || null;
+};
 
 /** 
 * Crée un nouveau livre.

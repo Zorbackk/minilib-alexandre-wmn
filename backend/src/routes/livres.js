@@ -27,7 +27,7 @@ router.get('/:id', asyncWrapper(controller.getLivreById));
 router.post('/', validateLivre, asyncWrapper(controller.createLivre));
 
 // PUT /api/v1/livres/:id → modifier un livre
-router.put('/:id', validateLivre, asyncWrapper(controller.updateLivre));
+router.put('/:id', asyncWrapper(controller.updateLivre));
 
 // DELETE /api/v1/livres/:id → supprime un livre
 router.delete('/:id', asyncWrapper(controller.deleteLivre));
