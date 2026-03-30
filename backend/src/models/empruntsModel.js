@@ -15,7 +15,7 @@ import pool from '../config/database.js'
 export const findAllNonReturned = async () => {
   const result = await pool.query(`SELECT * FROM emprunts WHERE date_retour_effective IS NULL ORDER BY date_emprunt ASC`);
   return result.rows;
-}
+};
 
 /** 
 * @async.
@@ -24,7 +24,7 @@ export const findAllNonReturned = async () => {
 export const findAll = async () => {
   const result = await pool.query(`SELECT * FROM emprunts ORDER BY date_emprunt ASC`);
   return result.rows;
-}
+};
 
 /**
 * Réalise un emprunt
