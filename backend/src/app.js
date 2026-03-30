@@ -9,6 +9,8 @@ import cors from 'cors';
 
 // Import des routeurs (on les créera juste après)
 import livresRouter from './routes/livres.js';
+import adherentsRouter from './routes/adherents.js'
+import empruntsRouter from './routes/emprunts.js'
 
 // Initialisation de l'application Express---------------------------------------------------
 const app = express();
@@ -30,6 +32,12 @@ app.use((req, res, next) => {
 // Routes -------------------------------------------------------------------------------------
 // Toutes les routes de livres seront préfixées par /api/v1/livres
 app.use('/api/v1/livres', livresRouter);
+
+// Toutes les routes des adhérents seront préfixées par /api/v1/adherents
+app.use('/api/v1/adherents', adherentsRouter);
+
+// Toutes les routes des emprunts seront préfixées par /api/v1/emprunts
+app.use('/api/v1/emprunts', empruntsRouter);
 
 // Route de santé - permet de vérifier que le serveur tourne
 app.get('/api/v1/health', (req, res) => {
@@ -53,6 +61,15 @@ app.use((err, req, res, next) => {
   console.error('Erreur serveur:', err.message);
   res.status(500).json({erreur: 'Erreur interne du serveur'});
 });
+
+// Middleware errorHandler global
+// Express reconnaît ce middleware à ses 4 paramètres (err, req, res, next)
+app.use((err, req, res, next) => {
+  const status = err.statusCode || 500;
+  const message = status === 500 ? 'Erreur interne du serveur' : err.message;
+  if (status === 500) console.error('[ERREUR]', err.message);
+  res.status(status).json({erreur: message});
+})
 
 // Démarrage ---------------------------------------------------------------------------------
 app.listen(PORT, () => {
