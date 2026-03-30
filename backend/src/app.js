@@ -33,7 +33,7 @@ app.use((req, res, next) => {
 app.use('/api/v1/livres', livresRouter);
 
 // Toutes les routes des adhérents seront préfixées par /api/v1/adherents
-app.use('/api/vi/adherents', adherentsRouter);
+app.use('/api/v1/adherents', adherentsRouter);
 
 // Route de santé - permet de vérifier que le serveur tourne
 app.get('/api/v1/health', (req, res) => {

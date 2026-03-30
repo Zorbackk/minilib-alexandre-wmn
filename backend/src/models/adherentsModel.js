@@ -23,7 +23,19 @@ const genererNumeroAdherent = async () => {
 * @returns {Promise<Array>} Tous les adhérents actifs
 */
 export const findAll = async () => {
-  const result = await pool.query(`SELECT * FROM adherents WHERE id = $1`, [id]);
+  const result = await pool.query(`SELECT * FROM adherents WHERE actif = true ORDER BY nom, prenom`);
+  return result.rows;
+};
+
+/** 
+* @async
+* @returns {Promise<Object|null>}
+*/
+export const findById = async (id) => {
+  const result = await pool.query(
+    `SELECT * FROM adherents WHERE id = $1`,
+    [id]
+  );
   return result.rows[0] || null;
 };
 
