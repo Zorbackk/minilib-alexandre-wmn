@@ -26,6 +26,26 @@ export const findAll = async () => {
   return result.rows;
 };
 
+/** 
+* Trouve les emprunts en retard (qui ont dépassé la date de retour prévue)
+* @async
+* @returns {Promise<Array>} Emprunts en retard
+*/
+export const findRetards = async () => {
+  const result = await pool.query(`
+    SELECT e.id, l.titre, a.nom || '' || a.prenom AS adherent,
+    e.date_retour_prevue,
+    CURRENT_DATE - e.date_retour_prevue AS jours_retard
+    FROM emprunts e
+    JOIN livres l ON e.livre_id = l.id
+    JOIN adherents a ON e.adherent_id = a.id
+    WHERE e.date_retour_effective IS NULL
+    AND e.date_retour_prevue < CURRENT_DATE
+    ORDER BY jours_retard DESC
+    `);
+  return result.rows;
+};
+
 /**
 * Réalise un emprunt
 * @async

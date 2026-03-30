@@ -13,6 +13,12 @@ export const getNonRendus = async (req, res) => {
   res.json(borrowed);
 };
 
+/** GET api/v1/emprunts/retards */
+export const getRetards = async (req, res) => {
+  const result = await empruntsModel.findRetards();
+  res.json(result);
+}
+
 /** POST /api/v1/emprunts - Réalise un emprunt */
 export const empruntLivre = async (req, res) => {
   const {livre_id, adherent_id} = req.body;

@@ -62,6 +62,15 @@ app.use((err, req, res, next) => {
   res.status(500).json({erreur: 'Erreur interne du serveur'});
 });
 
+// Middleware errorHandler global
+// Express reconnaît ce middleware à ses 4 paramètres (err, req, res, next)
+app.use((err, req, res, next) => {
+  const status = err.statusCode || 500;
+  const message = status === 500 ? 'Erreur interne du serveur' : err.message;
+  if (status === 500) console.error('[ERREUR]', err.message);
+  res.status(status).json({erreur: message});
+})
+
 // Démarrage ---------------------------------------------------------------------------------
 app.listen(PORT, () => {
   console.log(`Serveur MiniLib démarré sur http://localhost:${PORT}`);
