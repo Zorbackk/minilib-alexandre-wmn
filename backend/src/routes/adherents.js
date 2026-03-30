@@ -10,6 +10,9 @@ router.get('/', asyncWrapper(controller.getAdherents));
 // GET /api/v1/adherents/:id → détail d'un adhérent
 router.get('/:id', asyncWrapper(controller.getAdherentById));
 
+// GET api/v1/emprunts/retards
+router.get('/emprunts/retards', asyncWrapper(controller.getRetards));
+
 // POST /api/v1/adherents → ajout d'un adhérent
 router.post('/', asyncWrapper(controller.createAdherent));
 

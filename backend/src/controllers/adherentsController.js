@@ -15,6 +15,7 @@ export const getAdherentById = async (req, res) => {
   res.json(adherent);
 };
 
+
 /** POST /api/v1/adherents */
 export const createAdherent = async (req, res) => {
   const {nom, prenom, email} = req.body;
