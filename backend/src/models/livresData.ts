@@ -1,4 +1,5 @@
 // backend/src/models/livresModel.js
+// Annotations TypeScript via JSDoc - compatible Node.js sans compilation
 
 /**
 * Accès aux données livres via PostgreSQL
@@ -10,17 +11,17 @@
 
 import pool from '../config/database.js'
 
+import { Livre, CreateLivreDto, FiltresLivre } from '../types/index.js'
+
 /** 
 * 
 * @async
-* @param {Object} [filtres={}]
-* @param {string} [filtres.genre]
-* @param {boolean} [filtres.disponible]
-* @param {string} [filtres.recherche] - Recherche dans titre ou auteur (ILIKE)
-* @returns {Promise<Array>} Tableau de livres
+* @param {FiltresLivre} [filtres={}]
+* Recherche dans titre ou auteur (ILIKE)
+* @returns {Promise<Livre[]>} Tableau de livres
 */
 
-export const findAll = async (filtres = {}) => {
+export const findAll = async (filtres: FiltresLivre = {}): Promise<Livre[]> => {
   const conditions = []; // tableau des morceaux WHERE : ["genre" = $1, "disponible" = $2]
   const valeurs = []; // tableau des valeurs réelles : [ROMAN, TRUE]
   let idx = 1; // compteur pour numéroter les paramètres $1, $2, etc...
@@ -31,7 +32,7 @@ export const findAll = async (filtres = {}) => {
   }
   if (filtres.disponible !== undefined) {
     conditions.push(`disponible = $${idx++}`);
-    valeurs.push(filtres.disponible === 'true');
+    valeurs.push(filtres.disponible); // Modifié car géré directement dans le controller
   }
   if (filtres.recherche) {
     conditions.push(`(titre ILIKE $${idx} OR auteur ILIKE $${idx})`);
@@ -51,7 +52,7 @@ export const findAll = async (filtres = {}) => {
 * @param {number} id
 * @return {Promise<Object|null>} Livre ou null
  */
-export const findById = async (id) => {
+export const findById = async (id : number) : Promise<Livre | null> => {
   const result = await pool.query('SELECT * FROM livres WHERE id = $1', [id]);
   return result.rows[0] || null;
 };
@@ -59,17 +60,17 @@ export const findById = async (id) => {
 /** 
 * Crée un nouveau livre.
 * @async
-* @param {Object} data - {isbn, titre, auteur, annee, genre} 
-* @return {Promise<Object>} Le livre créé avec son id
+* @param {CreateLivreDto} data - {isbn, titre, auteur, annee, genre} 
+* @return {Promise<Livre>} Le livre créé avec son id
 */
-export const create = async ({ isbn, titre, auteur, annee, genre }) => {
+export const create = async ({ isbn, titre, auteur, annee, genre } : CreateLivreDto) : Promise<Livre> => {
   const result = await pool.query(
     `INSERT INTO livres (isbn, titre, auteur, annee, genre)
     VALUES ($1, $2, $3, $4, $5) RETURNING *`, 
     [isbn, titre, auteur, annee, genre]
     // RETURNING * retourne la ligne insérée - y compris l'id généré par SERIAL
   );
-  return result.rows[0];
+  return result.rows[0] as Livre;
 }
 
 /** 
@@ -80,7 +81,7 @@ export const create = async ({ isbn, titre, auteur, annee, genre }) => {
 * @returns {Promise<Object|null>} Livre mis à jour ou null
  */
 
-export const update = async (id, data) => {
+export const update = async (id : number, data : Partial<CreateLivreDto>) : Promise<Livre | null> => {
   // Construction dynamique du SET
   const champs = Object.keys(data);
   const valeurs = Object.values(data);
@@ -101,10 +102,10 @@ export const update = async (id, data) => {
 * @param {number} id
 * @returns {Promise<boolean>} true si supprimé 
  */
-export const remove = async (id) => {
+export const remove = async (id : number) : Promise<boolean> => {
   const result = await pool.query(
     `DELETE FROM livres WHERE id = $1 RETURNING id`, [id]
   );
-  return result.rowCount > 0;
+  return (result.rowCount ?? 0 )> 0;
 };
 

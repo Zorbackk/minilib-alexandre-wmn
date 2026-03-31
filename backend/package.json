@@ -6,8 +6,8 @@
   "private": "true",
   "main": "src/app.js",
   "scripts": {
-    "start": "node --env-file=.env src/app.js",
-    "dev": "node --watch --env-file=.env src/app.js",
+    "start": "node --env-file=.env src/app.ts",
+    "dev": "tsx --watch --env-file=.env src/app.ts",
     "test": "echo \"Tests à venir\""
   },
   "keywords": [],
@@ -19,9 +19,11 @@
     "pg": "^8.20.0"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
     "@types/node": "^25.5.0",
     "@types/pg": "^8.20.0",
+    "tsx": "^4.21.0",
     "typescript": "^6.0.2"
   }
 }
