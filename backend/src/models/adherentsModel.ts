@@ -6,6 +6,8 @@
 
 import pool from '../config/database.js'
 
+import {Adherent, CreateAdherentDto} from '../types/index.js'
+
 /** 
 * Génère un numéro adhérent unique au format ADH-XXX.
 * @async 
@@ -31,7 +33,7 @@ export const findAll = async () => {
 * @async
 * @returns {Promise<Object|null>}
 */
-export const findById = async (id) => {
+export const findById = async (id : number) : Promise<Adherent | null> => {
   const result = await pool.query(
     `SELECT * FROM adherents WHERE id = $1`,
     [id]
@@ -45,7 +47,7 @@ export const findById = async (id) => {
 * @param {Object} data - {nom, prenom, email}
 * @returns {Promise<Object>} Adhérent créé 
 */
-export const create = async ({nom, prenom, email}) => {
+export const create = async ({nom, prenom, email} : CreateAdherentDto) : Promise<Adherent> => {
   const numero = await genererNumeroAdherent();
   const result = await pool.query(
     `INSERT INTO adherents (numero_adherent, nom, prenom, email)
@@ -62,7 +64,7 @@ export const create = async ({nom, prenom, email}) => {
 * @returns {Promise<Object || null>} Adhérent mis à jour
 */
 
-export const desactiver = async (id) => {
+export const desactiver = async (id : number) : Promise<Adherent | null> => {
   const result = await pool.query(
     `UPDATE adherents SET actif = false WHERE id = $1 RETURNING *`,
     [id]
