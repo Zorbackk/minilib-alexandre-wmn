@@ -9,7 +9,8 @@
 * @param {import('express').NextFunction} next
 */
 
-const validateLivre = (req, res, next) => {
+import { RequestHandler } from "express";
+const validateLivre : RequestHandler = (req, res, next) => {
   const { isbn, titre, auteur } = req.body;
   const erreurs = [];
   if (!isbn || isbn.trim() === '') erreurs.push('isbn est requis');
