@@ -14,7 +14,7 @@ export interface Emprunt {
 }
 
 // Interface enrichie avec les données des JOINs SQL
-export interface EmpruntAvecDetail extends Emprunt {
+export interface EmpruntAvecDetails extends Emprunt {
   titre_livre: string;
   nom_adherent: string;
   en_retard: boolean;
