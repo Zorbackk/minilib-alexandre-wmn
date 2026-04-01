@@ -1,6 +1,8 @@
 // backend/src/controllers/adherentsController.js
 import * as adherentsModel from '../models/adherentsModel.js'
 
+import { RequestHandler } from 'express';
+
 /** GET /api/v1/adherents */
 export const getAdherents = async (req, res) => {
   const adherents = await adherentsModel.findAll();
