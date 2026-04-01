@@ -3,7 +3,7 @@
 // Point d'entrée du serveur Express MiniLib
 // Démarre avec : npm run dev
 
-import express from 'express';
+import express, { ErrorRequestHandler} from 'express';
 import cors from 'cors';
 // Node 24 : plus de dotenv // Charge les variables depuis .env
 
@@ -57,19 +57,19 @@ app.use((req, res) => {
 
 // Middleware de gestion des erreurs serveur (500)
 // Express reconnaît ce middleware à ses 4 paramètres (err en premier)
-app.use((err, req, res, next) => {
+app.use(((err, req, res, next) => {
   console.error('Erreur serveur:', err.message);
   res.status(500).json({erreur: 'Erreur interne du serveur'});
-});
+}) as ErrorRequestHandler);
 
 // Middleware errorHandler global
 // Express reconnaît ce middleware à ses 4 paramètres (err, req, res, next)
-app.use((err, req, res, next) => {
+app.use(((err, req, res, next) => {
   const status = err.statusCode || 500;
   const message = status === 500 ? 'Erreur interne du serveur' : err.message;
   if (status === 500) console.error('[ERREUR]', err.message);
   res.status(status).json({erreur: message});
-})
+}) as ErrorRequestHandler);
 
 // Démarrage ---------------------------------------------------------------------------------
 app.listen(PORT, () => {

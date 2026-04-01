@@ -5,7 +5,9 @@
 * @params {Function} fn - Handler async
 * @returns {Function} Handler avec gestion d'erreur automatique
  */
-const asyncWrapper = (fn) => (req, res, next) => 
+
+import { RequestHandler } from "express";
+const asyncWrapper = (fn : RequestHandler) : RequestHandler => (req, res, next) => 
   Promise.resolve(fn(req, res, next)).catch(next);
 
 export default asyncWrapper;
