@@ -11,36 +11,36 @@ export interface ApiError {
   champs?: string[];
 }
 
-/** 
-* Effectue un appel HTTP vers l'API MiniLib
-* Lance une Error si le statut HTTP est >= 400
-*
-* @param endpoint Chemin relatif ex: "/livres" ou "livres/1"
-* @param options Options fetch natives (method, body, headers...) 
-* @returns Réponse parsée en JSON, typée T
-*/
-export async function apiRequest<T>(
-endpoint: string,
-options?: RequestInit
+/**
+ * Effectue un appel HTTP vers l'API MiniLib
+ * Lance une Error si le statut HTTP est >= 400
+ *
+ * @param endpoint Chemin relatif ex: "/livres" ou "livres/1"
+ * @param options Options fetch natives (method, body, headers...)
+ * @returns Réponse parsée en JSON, typée T
+ */
+export async function apiRequest<T>
+(
+  endpoint: string,
+  options?: RequestInit,
 ): Promise<T> {
-const response = await fetch(`${BASE_URL}${endpoint}`, {
-headers: {
-"Content-Type": "application/json",
-...options?.headers,
-},
-...options,
-});
+  const response = await fetch(`${BASE_URL}${endpoint}`, {
+    headers: {
+      "Content-Type": "application/json",
+      ...options?.headers,
+    },
+    ...options,
+  });
 
-if (!response.ok) {
-  // Tenter de lire le message d'erreur renvoyé par l'API
-  const erreur: ApiError = await response.json().catch(() => ({
-    erreur: `Erreur HTTP ${response.status}`,
-  }));
-  throw new Error(erreur.erreur);
-}
+  if (!response.ok) {
+    // Tenter de lire le message d'erreur renvoyé par l'API
+    const erreur: ApiError = await response.json().catch(() => ({
+      erreur: `Erreur HTTP ${response.status}`,
+    }));
+    throw new Error(erreur.erreur);
+  }
 
-// 204 No Content : pas de corps à parser (DELETE)
-if (response.status === 204) 
-  return undefined as T;
-return response.json() as Promise<T>;
+  // 204 No Content : pas de corps à parser (DELETE)
+  if (response.status === 204) return undefined as T;
+  return response.json() as Promise<T>;
 }
