@@ -14,17 +14,13 @@ function LivresPage() {
   const [erreur, setErreur] = useState<string | null>(null);
   const [recherche, setRecherche] = useState<string>("")
 
-  // useEffect(callback, [dépendances]) → exécute le callback après le rendu
-  // [] = se déclenche une seule fois au montage du composant
-  // Si on mettait [recherche], ça se relancerait à chaque changement de recherche
-  // Chargement au montage du composant
   useEffect(() => {
-    // useEffect ne peut pas être async directement → fonction interne async
-    const chargerLivre = async () => {
+// useEffect ne peut pas être async directement → fonction interne async
+    const timer = setTimeout(async () => {
       try {
         setChargement(true);
         setErreur(null);
-        const data = await getLivres({recherche : recherche});
+        const data = await getLivres({ recherche });
         setLivres(data);
       } catch(err) {
         setErreur(err instanceof Error ? err.message : "Erreur inconnue");
@@ -32,10 +28,10 @@ function LivresPage() {
         // finally s'exécute toujours, succès ou erreur
         setChargement(false);
       }
-    };
-
-    chargerLivre();
-  }, [recherche]); // une seule fois au montage
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [recherche]
+)
 
 // Rendu conditionnel -----------------------------
 if (chargement) {
