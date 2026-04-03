@@ -16,7 +16,11 @@ function LivresPage() {
 
   useEffect(() => {
 // useEffect ne peut pas être async directement → fonction interne async
+// useEffect sert à déclencher l'appel API - setLivres provoque l'affichage
+// Recherche en dépendance = déclenchement à la saisie utilisateur
     const timer = setTimeout(async () => {
+      // Debounce : attend 500ms après la dernière saisie avant d'appeler l'API
+      // Evite d'envoyer une requête à chaque frappe clavier
       try {
         setChargement(true);
         setErreur(null);
@@ -29,6 +33,8 @@ function LivresPage() {
         setChargement(false);
       }
     }, 500);
+    // Cleanup : React appelle cette fonction avant chaque re-déclenchement du useEffect
+    // Si l'utilisateur retape avant 500ms, le timer précédent est annulé
     return () => clearTimeout(timer);
   }, [recherche]
 )
@@ -53,7 +59,8 @@ return (
     <p style={{ marginBottom: "16px", color: "#555"}}>
       {livres.length} livre{livres.length > 1 ? "s" : ""} dans la bibliothèque.
     </p>
-    <p><SearchBarLivres onRecherche={setRecherche} valeur={recherche}/></p>
+    {/* On passe les props du composant enfant ici afin d'activer la recherche / via onRecherche("") du bouton Reset, nettoie l'input */}
+    <SearchBarLivres onRecherche={setRecherche} valeur={recherche}/>
       {livres.length === 0 ? (
         <p>Aucun livre dans le catalogue.</p>
       ) : (
