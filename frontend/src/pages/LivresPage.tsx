@@ -53,7 +53,7 @@ return (
     <p style={{ marginBottom: "16px", color: "#555"}}>
       {livres.length} livre{livres.length > 1 ? "s" : ""} dans la bibliothèque.
     </p>
-    <p><SearchBarLivres onRecherche={setRecherche}/></p>
+    <p><SearchBarLivres onRecherche={setRecherche} valeur={recherche}/></p>
       {livres.length === 0 ? (
         <p>Aucun livre dans le catalogue.</p>
       ) : (
