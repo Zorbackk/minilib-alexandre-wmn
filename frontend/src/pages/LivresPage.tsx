@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import type { Livre } from "../types";
 import { getLivres } from "../services/livreService";
 import LivreCard from "../components/LivreCard"
+import SearchBarLivres from "../components/SearchBarLivres";
 
 function LivresPage() {
   // useState<Type>(valeurInitiale) → retourne [valeur, setter]
@@ -11,6 +12,7 @@ function LivresPage() {
   const [livres, setLivres] = useState<Livre[]>([]);
   const [chargement, setChargement] = useState<boolean>(true);
   const [erreur, setErreur] = useState<string | null>(null);
+  const [recherche, setRecherche] = useState<string>("")
 
   // useEffect(callback, [dépendances]) → exécute le callback après le rendu
   // [] = se déclenche une seule fois au montage du composant
@@ -22,7 +24,7 @@ function LivresPage() {
       try {
         setChargement(true);
         setErreur(null);
-        const data = await getLivres();
+        const data = await getLivres({recherche : recherche});
         setLivres(data);
       } catch(err) {
         setErreur(err instanceof Error ? err.message : "Erreur inconnue");
@@ -33,7 +35,7 @@ function LivresPage() {
     };
 
     chargerLivre();
-  }, []); // une seule fois au montage
+  }, [recherche]); // une seule fois au montage
 
 // Rendu conditionnel -----------------------------
 if (chargement) {
@@ -55,6 +57,7 @@ return (
     <p style={{ marginBottom: "16px", color: "#555"}}>
       {livres.length} livre{livres.length > 1 ? "s" : ""} dans la bibliothèque.
     </p>
+    <p><SearchBarLivres onRecherche={setRecherche}/></p>
       {livres.length === 0 ? (
         <p>Aucun livre dans le catalogue.</p>
       ) : (
