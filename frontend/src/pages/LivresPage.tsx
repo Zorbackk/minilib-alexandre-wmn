@@ -12,7 +12,9 @@ function LivresPage() {
   const [livres, setLivres] = useState<Livre[]>([]);
   const [chargement, setChargement] = useState<boolean>(true);
   const [erreur, setErreur] = useState<string | null>(null);
-  const [recherche, setRecherche] = useState<string>("")
+  const [recherche, setRecherche] = useState<string>("");
+  // undefined = pas de filtre (tous les livres), true = disponibles, false = empruntés
+  const [disponible, setDisponible] = useState<boolean | undefined>(undefined);
 
   useEffect(() => {
 // useEffect ne peut pas être async directement → fonction interne async
@@ -24,7 +26,7 @@ function LivresPage() {
       try {
         setChargement(true);
         setErreur(null);
-        const data = await getLivres({ recherche });
+        const data = await getLivres({ recherche, disponible });
         setLivres(data);
       } catch(err) {
         setErreur(err instanceof Error ? err.message : "Erreur inconnue");
@@ -36,7 +38,8 @@ function LivresPage() {
     // Cleanup : React appelle cette fonction avant chaque re-déclenchement du useEffect
     // Si l'utilisateur retape avant 500ms, le timer précédent est annulé
     return () => clearTimeout(timer);
-  }, [recherche]
+  // Les deux filtres en dépendance : se redéclenche si l'un ou l'autre change
+  }, [recherche, disponible]
 )
 
 // Rendu conditionnel -----------------------------
@@ -59,8 +62,9 @@ return (
     <p style={{ marginBottom: "16px", color: "#555"}}>
       {livres.length} livre{livres.length > 1 ? "s" : ""} dans la bibliothèque.
     </p>
-    {/* On passe les props du composant enfant ici afin d'activer la recherche / via onRecherche("") du bouton Reset, nettoie l'input */}
-    <SearchBarLivres onRecherche={setRecherche} valeur={recherche}/>
+    {/* On passe les props du composant enfant ici afin d'activer la recherche */}
+    {/*Via onRecherche("") du bouton Reset, nettoie l'input*/}
+    <SearchBarLivres onRecherche={setRecherche} valeur={recherche} onFiltreDisponible={setDisponible} filtreDisponible={disponible}/>
       {livres.length === 0 ? (
         <p>Aucun livre dans le catalogue.</p>
       ) : (
