@@ -1,21 +1,20 @@
 // frontend/src/pages/LivresPage.tsx
 import { useState, useEffect } from "react";
-import type { Livre } from "../types";
-import { getLivres } from "../services/livreService";
-import LivreCard from "../components/LivreCard";
-import SearchBarLivres from "../components/SearchBarLivres";
+import type { Adherent } from "../types";
+import { getAdherents } from "../services/adherentService";
+import AdherentCard from "../components/AdherentCard";
 import './Spinner.css'
 
-function LivresPage() {
+function AdherentsPage() {
   // useState<Type>(valeurInitiale) → retourne [valeur, setter]
   // Chaque appel au setter modifie l'état et déclenche un re-render
   // Les 3 états pour tout fetch: données, chargement, erreur
-  const [livres, setLivres] = useState<Livre[]>([]);
+  const [adherents, setAdherents] = useState<Adherent[]>([]);
   const [chargement, setChargement] = useState<boolean>(true);
   const [erreur, setErreur] = useState<string | null>(null);
-  const [recherche, setRecherche] = useState<string>("");
+  // const [recherche, setRecherche] = useState<string>("");
   // undefined = pas de filtre (tous les livres), true = disponibles, false = empruntés
-  const [disponible, setDisponible] = useState<boolean | undefined>(undefined);
+  // const [disponible, setDisponible] = useState<boolean | undefined>(undefined);
 
   useEffect(() => {
 // useEffect ne peut pas être async directement → fonction interne async
@@ -29,8 +28,8 @@ function LivresPage() {
         setErreur(null);
         // TODO 02 : retirer après test du spinner
         // await new Promise((resolve) => setTimeout(resolve, 2000));
-        const data = await getLivres({ recherche, disponible });
-        setLivres(data);
+        const data = await getAdherents();
+        setAdherents(data);
       } catch(err) {
         setErreur(err instanceof Error ? err.message : "Erreur inconnue");
       } finally {
@@ -42,7 +41,7 @@ function LivresPage() {
     // Si l'utilisateur retape avant 500ms, le timer précédent est annulé
     return () => clearTimeout(timer);
   // Les deux filtres en dépendance : se re-déclenche si l'un ou l'autre change
-  }, [recherche, disponible]
+  }, []
 )
 
 // Rendu conditionnel -----------------------------
@@ -61,9 +60,9 @@ if (erreur) {
 
 return (
   <div>
-    <h1>Catalogue de livres</h1>
+    <h1>Liste de{adherents.length > 1 ? "s" : ""} adhérent{adherents.length > 1 ? "s" : ""}</h1>
     <p style={{ marginBottom: "16px", color: "#555"}}>
-      {livres.length} livre{livres.length > 1 ? "s" : ""} dans la bibliothèque.
+      {adherents.length} adhérent{adherents.length > 1 ? "s" : ""} inscrit{adherents.length > 1 ? "s" : ""}.
     </p>
     {/* On passe les props du composant enfant ici afin d'activer la recherche */}
     {/*
@@ -72,16 +71,16 @@ return (
       onFiltreDisponible : callback appelé lors du changement du select — met à jour l'état `disponible` (filtre par disponibilité)
       filtreDisponible : valeur courante du select, contrôlée par l'état `disponible`
     */}
-    <SearchBarLivres onRecherche={setRecherche} valeur={recherche} onFiltreDisponible={setDisponible} filtreDisponible={disponible}/>
-      {livres.length === 0 ? (
-        <p>Aucun livre dans le catalogue.</p>
+    {/* <SearchBarLivres onRecherche={setRecherche} valeur={recherche} onFiltreDisponible={setDisponible} filtreDisponible={disponible}/> */}
+      {adherents.length === 0 ? (
+        <p>Aucun adherent inscrit.</p>
       ) : (
-        livres.map((livre) => (
-          <LivreCard key={livre.id} livre={livre} />
+        adherents.map((adherent) => (
+          <AdherentCard key={adherent.id} adherent={adherent} />
         ))
       )}
   </div>
 );
 }
 
-export default LivresPage;
+export default AdherentsPage;
