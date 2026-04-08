@@ -4,6 +4,7 @@ import type { Livre } from "../types";
 import { getLivres } from "../services/livreService";
 import LivreCard from "../components/LivreCard"
 import SearchBarLivres from "../components/SearchBarLivres";
+import './LivresPage.css'
 
 function LivresPage() {
   // useState<Type>(valeurInitiale) → retourne [valeur, setter]
@@ -26,6 +27,8 @@ function LivresPage() {
       try {
         setChargement(true);
         setErreur(null);
+        // TODO 02 : retirer après test du spinner
+        // await new Promise((resolve) => setTimeout(resolve, 2000));
         const data = await getLivres({ recherche, disponible });
         setLivres(data);
       } catch(err) {
@@ -44,7 +47,7 @@ function LivresPage() {
 
 // Rendu conditionnel -----------------------------
 if (chargement) {
-  return <p>Chargement du catalogue...</p>
+  return <p className="loader"></p>
 }
 
 if (erreur) {
