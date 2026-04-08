@@ -20,8 +20,7 @@ function AdherentCard({ adherent } : AdherentCardProps)  {
         {adherent.numero_adherent}
       </h3>
       <p style={{color: "#555", fontSize: "14px"}}>
-        {adherent.nom}
-        {adherent.prenom}
+        {adherent.nom} {adherent.prenom}
       </p>
         <p style={{ fontSize: "13px", color: "#888"}}>
           {adherent.email} 
