@@ -38,7 +38,7 @@ function LivresPage() {
     // Cleanup : React appelle cette fonction avant chaque re-déclenchement du useEffect
     // Si l'utilisateur retape avant 500ms, le timer précédent est annulé
     return () => clearTimeout(timer);
-  // Les deux filtres en dépendance : se redéclenche si l'un ou l'autre change
+  // Les deux filtres en dépendance : se re-déclenche si l'un ou l'autre change
   }, [recherche, disponible]
 )
 
@@ -63,7 +63,12 @@ return (
       {livres.length} livre{livres.length > 1 ? "s" : ""} dans la bibliothèque.
     </p>
     {/* On passe les props du composant enfant ici afin d'activer la recherche */}
-    {/*Via onRecherche("") du bouton Reset, nettoie l'input*/}
+    {/*
+      onRecherche : callback appelé à chaque frappe — met à jour l'état `recherche` (filtre par titre/auteur)
+      valeur : valeur courante de l'input texte, contrôlée par l'état `recherche`
+      onFiltreDisponible : callback appelé lors du changement du select — met à jour l'état `disponible` (filtre par disponibilité)
+      filtreDisponible : valeur courante du select, contrôlée par l'état `disponible`
+    */}
     <SearchBarLivres onRecherche={setRecherche} valeur={recherche} onFiltreDisponible={setDisponible} filtreDisponible={disponible}/>
       {livres.length === 0 ? (
         <p>Aucun livre dans le catalogue.</p>
