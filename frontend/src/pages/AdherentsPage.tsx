@@ -1,4 +1,5 @@
 // frontend/src/pages/LivresPage.tsx
+// TODO 04 : Clean le code et les commentaires pour correspondre à Adherents et plus Livres + Améliorer le composant
 import { useState, useEffect } from "react";
 import type { Adherent } from "../types";
 import { getAdherents } from "../services/adherentService";
@@ -64,14 +65,6 @@ return (
     <p style={{ marginBottom: "16px", color: "#555"}}>
       {adherents.length} adhérent{adherents.length > 1 ? "s" : ""} inscrit{adherents.length > 1 ? "s" : ""}.
     </p>
-    {/* On passe les props du composant enfant ici afin d'activer la recherche */}
-    {/*
-      onRecherche : callback appelé à chaque frappe — met à jour l'état `recherche` (filtre par titre/auteur)
-      valeur : valeur courante de l'input texte, contrôlée par l'état `recherche`
-      onFiltreDisponible : callback appelé lors du changement du select — met à jour l'état `disponible` (filtre par disponibilité)
-      filtreDisponible : valeur courante du select, contrôlée par l'état `disponible`
-    */}
-    {/* <SearchBarLivres onRecherche={setRecherche} valeur={recherche} onFiltreDisponible={setDisponible} filtreDisponible={disponible}/> */}
       {adherents.length === 0 ? (
         <p>Aucun adherent inscrit.</p>
       ) : (

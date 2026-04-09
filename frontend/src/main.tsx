@@ -1,10 +1,28 @@
 import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
+import ReactDOM from "react-dom/client"
 import './index.css'
-import App from './App.tsx'
+import { createBrowserRouter, RouterProvider } from "react-router"
+import RootLayout from './components/routes/RootLayout';
+import LivresPage from './pages/LivresPage';
+import AdherentsPage from './pages/AdherentsPage';
 
-createRoot(document.getElementById('root')!).render(
+const router = createBrowserRouter([
+  {
+    path: "/",
+    Component: RootLayout,
+    children: [
+      {index: true, Component: LivresPage},
+      {path: "adherents", Component: AdherentsPage},
+      // {path: "emprunts", Component: EmpruntsPage},
+    ]
+  },
+]);
+
+const root = document.getElementById("root");
+
+// En TypeScript mettre ! est l'assertion non-null - On garantit la non nullité à TS
+ReactDOM.createRoot(root!).render(
   <StrictMode>
-    <App />
+    <RouterProvider router={router} />
   </StrictMode>,
-)
+);
