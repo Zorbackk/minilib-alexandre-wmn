@@ -1,0 +1,19 @@
+# Définit tous les services de l'application et comment ils communiquent
+services:
+  db:
+    image: postgres:18
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/ # Changement de l'entrypoint pour accepter pgsl 18 - Facilite migration
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/02-seed.sql
+    ports:
+      - "5433:5432" # Port 5433 car le 5432 est déjà utilisé - Possible de ne pas mettre la section ports ici
+
+volumes:
+  postgres_data:
+    

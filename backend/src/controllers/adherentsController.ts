@@ -11,7 +11,7 @@ export const getAdherents : RequestHandler = async (req, res) => {
 
 /** GET /api/v1/adherents/:id */
 export const getAdherentById : RequestHandler = async (req, res) => {
-  const id = parseInt(req.params.id as string);
+  const id = Number.parseInt(req.params.id as string);
   const adherent = await adherentsModel.findById(id);
   if (!adherent) 
     return res.status(404).json({ erreur : `Adhérent id:${req.params.id} non trouvé`});
@@ -31,7 +31,7 @@ export const createAdherent : RequestHandler = async (req, res) => {
 
 /** DELETE /api/v1/adherents/:id - soft delete */
 export const desactiverAdherent : RequestHandler = async (req, res) => {
-  const id = parseInt(req.params.id as string)
+  const id = Number.parseInt(req.params.id as string)
   const adherent = await adherentsModel.desactiver(id);
   if (!adherent)
     return res.status(404).json({erreur: `Adhérent id:${req.params.id} non trouvé`});

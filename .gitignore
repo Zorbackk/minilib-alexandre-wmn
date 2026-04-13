@@ -22,3 +22,6 @@ Thumbs.db
 # Archives
 
 archives/
+
+# Production-ready compiled version of your code.
+dist/ 
