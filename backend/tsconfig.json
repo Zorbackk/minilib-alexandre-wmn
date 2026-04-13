@@ -7,9 +7,9 @@
     "outDir": "./dist",
     "rootDir": "./src",
     "strict": true,
+    // "noEmit": false, = désactivé en production car le npm run build est effectué dans le dockerfile
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "noEmit": true,
     "checkJs": true,
     "allowJs": true,
     // noEmit : true vérifie les types sans générer de fichiers

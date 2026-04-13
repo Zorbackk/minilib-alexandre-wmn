@@ -2,7 +2,7 @@
 
 /** * = sélecteur universel pour l'ensemble des éléments de la page, ici à la racine de l'app */
 *, *::before, *::after {
-  box-sizing: border-box; // padding et border sont inclus dans la hauteur/largeur déclarée
+  box-sizing: border-box; /* padding et border sont inclus dans la hauteur/largeur déclarée */
   margin: 0;
   padding: 0;
 }
@@ -21,6 +21,6 @@ h1 {
 }
 
 h2 {
-  color: 2E75B6;
+  color: #2E75B6;
   margin-bottom: 12px;
 }
