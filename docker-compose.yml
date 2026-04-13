@@ -10,10 +10,26 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/ # Changement de l'entrypoint pour accepter pgsl 18 - Facilite migration
       - ./database/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql
-      - ./database/schema.sql:/docker-entrypoint-initdb.d/02-seed.sql
+      - ./database/seed.sql:/docker-entrypoint-initdb.d/02-seed.sql
     ports:
       - "5433:5432" # Port 5433 car le 5432 est déjà utilisé - Possible de ne pas mettre la section ports ici
 
+  backend:
+    build: ./backend
+    restart: unless-stopped
+    environment:
+      PORT: 5000
+      NODE_ENV: production
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+
 volumes:
   postgres_data:
-    
+

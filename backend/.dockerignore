@@ -1,0 +1,7 @@
+# Backend/.dockerignore
+# Evite de copier node_modules (trop lourd et inutile)
+
+node_modules/
+.env 
+*.log
+dist/ 
