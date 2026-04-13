@@ -31,4 +31,29 @@ Alexandre **"Zorback"** Wiemann - Développeur Fullstack en formation CDA à l'A
 
   - [Mon portfolio](https://nevezio.com/)
   - [Mon LinkedIn](https://www.linkedin.com/in/alexandre-wiemann/)
+
+## Démarrage avec Docker
+
+## Prérequis 
+ - Docker 26+ et Docker compose v2+
+
+ ### Développement 
+ ``` bash
+
+ # Copier les variables d'environnement
+ cp .env.example .env
+ # Remplir le .env avec vos valeurs 
+
+ # Démarrer l'application complète
+ docker compose up --build
+
+ # Accéder à l'application 
+ # Frontend : http://localhost:3000
+ # API : http://localhost:5000
+ ```
+
+ ### Production 
+ ```bash
+ docker compose -f docker-compose.prod.yml up -d --build
+ ```
  
