@@ -25,3 +25,6 @@ archives/
 
 # Production-ready compiled version of your code.
 dist/ 
+
+# Documentation 
+**/docs

@@ -4,7 +4,8 @@
 // Client HTTP centralisé - Toute l'app passe par ici
 
 // Vite expose les variables VITE_ via import.meta.env
-const BASE_URL = import.meta.env.VITE_API_URL ?? "http:localhost:5000/api/v1";
+// Changemetn de la base en "/api/v1" car nginx proxifie déjà le "localhost:5000"
+const BASE_URL = import.meta.env.VITE_API_URL || "/api/v1";
 
 export interface ApiError {
   erreur: string;
