@@ -7,7 +7,6 @@ export async function getAdherents() : Promise<Adherent[]> {
   return apiRequest<Adherent[]>(`/adherents`)
 }
 
-
 /* Récupère un adhérent par son id */
 export async function getAdherentById(id: number) : Promise<Adherent> {
   // Get par défaut
