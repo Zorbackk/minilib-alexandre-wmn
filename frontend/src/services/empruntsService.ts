@@ -3,8 +3,8 @@ import type { Emprunt, EmpruntAvecDetails, CreateEmpruntDto } from "../types"
 import { apiRequest } from "./api"
 
 /* Récupère tous les emprunts */
-export async function getEmprunts() : Promise<Emprunt[]> {
-  return apiRequest<Emprunt[]>(`/emprunts`)
+export async function getEmprunts() : Promise<EmpruntAvecDetails[]> {
+  return apiRequest<EmpruntAvecDetails[]>(`/emprunts`)
 }
 
 /* Récupère les emprunts en-cours */

@@ -1,5 +1,5 @@
 // frontend/src/components/AdherentCard.tsx 
-import type { Adherent } from "../types";
+import type { Adherent } from "../../types";
 
 interface AdherentCardProps {
   // Bonne pratique 

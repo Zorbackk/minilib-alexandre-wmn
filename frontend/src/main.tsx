@@ -5,6 +5,7 @@ import { createBrowserRouter, RouterProvider } from "react-router"
 import RootLayout from './components/routes/RootLayout';
 import LivresPage from './pages/LivresPage';
 import AdherentsPage from './pages/AdherentsPage';
+import EmpruntsPage from './pages/EmpruntsPage';
 
 const router = createBrowserRouter([
   {
@@ -13,8 +14,8 @@ const router = createBrowserRouter([
     children: [
       {index: true, Component: LivresPage},
       {path: "adherents", Component: AdherentsPage},
-      // {path: "emprunts", Component: EmpruntsPage},
-    ]
+      {path: "emprunts", Component: EmpruntsPage},
+    ],
   },
 ]);
 

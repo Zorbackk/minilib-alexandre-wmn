@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import type { Adherent } from "../types";
 import { getAdherents } from "../services/adherentService";
-import AdherentCard from "../components/AdherentCard";
+import AdherentCard from "../components/cards/AdherentCard";
 import './Spinner.css'
 
 function AdherentsPage() {
@@ -13,13 +13,11 @@ function AdherentsPage() {
   const [adherents, setAdherents] = useState<Adherent[]>([]);
   const [chargement, setChargement] = useState<boolean>(true);
   const [erreur, setErreur] = useState<string | null>(null);
-  // const [recherche, setRecherche] = useState<string>("");
-  // undefined = pas de filtre (tous les livres), true = disponibles, false = empruntés
-  // const [disponible, setDisponible] = useState<boolean | undefined>(undefined);
+
 
   useEffect(() => {
 // useEffect ne peut pas être async directement → fonction interne async
-// useEffect sert à déclencher l'appel API - setLivres provoque l'affichage
+// useEffect sert à déclencher l'appel API - setAdherents provoque l'affichage
 // Recherche en dépendance = déclenchement à la saisie utilisateur
     const timer = setTimeout(async () => {
       // Debounce : attend 500ms après la dernière saisie avant d'appeler l'API

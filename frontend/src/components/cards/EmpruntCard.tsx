@@ -1,5 +1,5 @@
 // frontend/src/components/EmpruntCard.tsx 
-import type { EmpruntAvecDetails } from "../types";
+import type { EmpruntAvecDetails } from "../../types";
 
 interface EmpruntCardProps {
   // Bonne pratique 
