@@ -27,7 +27,7 @@ function LivresPage() {
       try {
         setChargement(true);
         setErreur(null);
-        // TODO 02 : retirer après test du spinner
+        // TODO 01 : retirer après test du spinner
         // await new Promise((resolve) => setTimeout(resolve, 2000));
         const data = await getLivres({ recherche, disponible });
         setLivres(data);
