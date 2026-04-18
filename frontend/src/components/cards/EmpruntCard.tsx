@@ -1,11 +1,12 @@
 // frontend/src/components/EmpruntCard.tsx 
 import type { EmpruntAvecDetails } from "../../types";
-
+import { formatDate } from "../../utils/formatDate.ts"
 interface EmpruntCardProps {
   // Bonne pratique 
   // Les props d'un composant React ne doivent pas être modifiées par le composant qui les reçoit
   readonly emprunt : EmpruntAvecDetails;
 };
+ 
 
 function EmpruntCard({ emprunt } : EmpruntCardProps)  {
   return (
@@ -17,13 +18,13 @@ function EmpruntCard({ emprunt } : EmpruntCardProps)  {
       marginBottom: "12px",
     }}>
       <h3 style={{marginBottom: "4px"}}>
-        Emprunt réalise le {emprunt.date_emprunt}
+        Emprunt réalise le {formatDate(emprunt.date_emprunt)}
       </h3>
       <p style={{color: "#555", fontSize: "14px"}}>
         {emprunt.titre_livre} par {emprunt.nom_adherent}
       </p>
         <p style={{ fontSize: "13px", color: "#888"}}>
-          Retour prévue le {emprunt.date_retour_prevue} 
+          Retour prévue le {formatDate(emprunt.date_retour_prevue)} 
         </p>
       <span style={{
         display: "inline-block",
