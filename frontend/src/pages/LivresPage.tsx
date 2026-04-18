@@ -2,8 +2,8 @@
 import { useState, useEffect } from "react";
 import type { Livre } from "../types";
 import { getLivres } from "../services/livreService";
-import LivreCard from "../components/LivreCard";
-import SearchBarLivres from "../components/SearchBarLivres";
+import LivreCard from "../components/cards/LivreCard";
+import SearchBarLivres from "../components/searchingComponents/SearchBarLivres";
 import './Spinner.css'
 
 function LivresPage() {

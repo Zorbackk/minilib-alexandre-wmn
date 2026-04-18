@@ -1,5 +1,5 @@
 // frontend/src/components/LivreCard.tsx
-import type { Livre } from "../types"
+import type { Livre } from "../../types"
 
 interface LivreCardProps {
   // Bonne pratique 
