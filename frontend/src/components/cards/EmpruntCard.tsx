@@ -8,18 +8,23 @@ interface EmpruntCardProps {
 };
 
 // Fonction pour définir le statut de l'emprunt 
-// On prendre l'objet étendu pour accéder à la boolean en_retard
+// On prend l'objet étendu pour accéder à la boolean en_retard
+// On applique directement le style par la même occasion
 function getStatus( EmpruntAvecDetails: EmpruntAvecDetails) {
 if (EmpruntAvecDetails.date_retour_effective !== null ) {
-  return ("rendu");
+  return { label: "Rendu", backgroundColor: "#89C99F", color: "#466651" }
 }
 if (EmpruntAvecDetails.en_retard) {
-  return ("en retard");
+  return { label: "En retard", backgroundColor: "#FFEBEE", color: "#B71C1C" }
 }
-  return ("a rendre")
+  return { label: "À rendre", backgroundColor: "#F4CA75", color: "#7B663C" }
 }
 
+
 function EmpruntCard({ emprunt } : EmpruntCardProps)  {
+
+  const statut = getStatus(emprunt); 
+
   return (
     <div style={{
       border: "1px solid #ddd",
@@ -50,10 +55,10 @@ function EmpruntCard({ emprunt } : EmpruntCardProps)  {
         borderRadius: "12px",
         fontSize: "13px",
         fontWeight: "bold",
-        backgroundColor: emprunt.en_retard ? "#E8F5E9" : "#FFEBEE",
-        color: emprunt.en_retard ? "#1B5E20" : "#B71C1C",
-      }}> {/*On utilise une fonction pour obtenir le statut de l'emprunt*/}
-        {getStatus(emprunt)}
+        backgroundColor: statut.backgroundColor,
+        color: statut.color,
+      }}> {/*La fonction est mise en constant pour appeler ses paramètres là où en as besoin*/}
+        {statut.label}
       </span>
     </div>
   );

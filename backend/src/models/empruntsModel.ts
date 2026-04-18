@@ -14,8 +14,25 @@ import { Emprunt, EmpruntAvecDetails, CreateEmpruntDto } from '../types/index.js
 * @returns {Promise<Array>} Retourne tous les emprunts en cours
 * TODO-01: Attention sur les routes API qui seront définies : /emprunts/en-cours ou un query param ?rendu=false
 */
-export const findAllNonReturned = async () : Promise<Emprunt[]> => {
-  const result = await pool.query(`SELECT * FROM emprunts WHERE date_retour_effective IS NULL ORDER BY date_emprunt ASC`);
+/** 
+* Retourne les emprunts en cours et dans les temps (non rendus, non en retard)
+* WHERE filtre sur deux conditions : pas encore rendu (date_retour_effective IS NULL)
+* ET délai non dépassé (date_retour_prevue > CURRENT_DATE)
+* en_retard sera toujours false ici — conservé pour correspondre à EmpruntAvecDetails
+*/
+export const findAllNonReturned = async () : Promise<EmpruntAvecDetails[]> => {
+  const result = await pool.query(`
+    SELECT e.*,
+    l.titre as titre_livre,
+    a.nom || ' ' || a.prenom AS nom_adherent,
+    e.date_retour_effective IS NULL AND e.date_retour_prevue < CURRENT_DATE AS en_retard
+    FROM emprunts e
+    JOIN livres l ON e.livre_id = l.id
+    JOIN adherents a ON e.adherent_id = a.id
+    WHERE e.date_retour_effective IS NULL
+    AND e.date_retour_prevue > CURRENT_DATE
+    ORDER BY e.date_emprunt ASC
+    `)
   return result.rows;
 };
 
@@ -43,15 +60,16 @@ export const findAll = async () : Promise<Emprunt[]> => {
 */
 export const findRetards = async () : Promise<EmpruntAvecDetails[]> => {
   const result = await pool.query(`
-    SELECT e.id, l.titre, a.nom || '' || a.prenom AS adherent,
-    e.date_retour_prevue,
-    CURRENT_DATE - e.date_retour_prevue AS jours_retard
+    SELECT e.*,
+    l.titre AS titre_livre,
+    a.nom || ' ' || a.prenom AS nom_adherent,
+    e.date_retour_effective IS NULL AND e.date_retour_prevue < CURRENT_DATE AS en_retard
     FROM emprunts e
     JOIN livres l ON e.livre_id = l.id
     JOIN adherents a ON e.adherent_id = a.id
     WHERE e.date_retour_effective IS NULL
     AND e.date_retour_prevue < CURRENT_DATE
-    ORDER BY jours_retard DESC
+    ORDER BY e.date_retour_prevue ASC
     `);
   return result.rows;
 };

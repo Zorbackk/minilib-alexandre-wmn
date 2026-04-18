@@ -8,8 +8,8 @@ export async function getEmprunts() : Promise<EmpruntAvecDetails[]> {
 }
 
 /* Récupère les emprunts en-cours */
-export async function getNonRendus() : Promise<Emprunt[]> {
-  return apiRequest<Emprunt[]>(`/emprunts/en-cours`)
+export async function getNonRendus() : Promise<EmpruntAvecDetails[]> {
+  return apiRequest<EmpruntAvecDetails[]>(`/emprunts/en-cours`)
 }
 
 /* Récupère les emprunts en retard */

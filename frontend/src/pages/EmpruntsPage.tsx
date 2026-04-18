@@ -2,10 +2,22 @@
 
 import { useState, useEffect } from "react";
 import type { EmpruntAvecDetails } from "../types";
-import { getEmprunts } from "../services/empruntsService";
+import { getEmprunts, getNonRendus,getRetards } from "../services/empruntsService";
 import EmpruntCard from "../components/cards/EmpruntCard";
 import SelectEmprunts from "../components/searchingComponents/SelectEmprunts";
 import './Spinner.css'
+
+// Fonction utilitaire pour déterminer quelle méthode du service utiliser dans le useEffect 
+// Sert pour le SelectEmprunts
+async function getStatus(inTime : boolean | undefined) {
+if (inTime == null ) {
+  return await getEmprunts();
+}
+if (inTime === true) {
+  return await getNonRendus();
+}
+  return await getRetards();
+} 
 
 function EmpruntsPage() {
   // useState<Type>(valeurInitiale) → retourne [valeur, setter]
@@ -16,7 +28,6 @@ function EmpruntsPage() {
   const [erreur, setErreur] = useState<string | null>(null);
   // undefined = undefined(tous les emprunts, true = dans les temps, false = en retard)
   const [inTime, setInTime] = useState<boolean | undefined>(undefined);
-  
 
 useEffect(() => {
 // useEffect ne peut pas être async directement → fonction interne async
@@ -25,7 +36,8 @@ const chargerEmprunts = async () => {
   try {
     setChargement(true);
     setErreur(null);
-    const data = await getEmprunts();
+    // Ici on passe la fonction utilitaire qui vérifie l'état de l'emprunt avant le render
+    const data = await getStatus(inTime);
     setEmprunts(data);
   } catch(err) {
     setErreur(err instanceof Error ? err.message : "Erreur inconnue");
@@ -34,7 +46,7 @@ const chargerEmprunts = async () => {
   }
 };
   chargerEmprunts();
-}, []
+}, [inTime]
 )
 
 // Rendu conditionnel -------------------------------------------------------------------------------
