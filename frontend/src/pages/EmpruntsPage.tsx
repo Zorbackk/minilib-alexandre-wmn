@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import type { EmpruntAvecDetails } from "../types";
 import { getEmprunts } from "../services/empruntsService";
 import EmpruntCard from "../components/cards/EmpruntCard";
-// import SelectEmprunts from "../components/searchingComponents/SelectEmprunts";
+import SelectEmprunts from "../components/searchingComponents/SelectEmprunts";
 import './Spinner.css'
 
 function EmpruntsPage() {
@@ -15,7 +15,7 @@ function EmpruntsPage() {
   const [chargement, setChargement] = useState<boolean>(true);
   const [erreur, setErreur] = useState<string | null>(null);
   // undefined = undefined(tous les emprunts, true = dans les temps, false = en retard)
-  // const [inTime, setInTime] = useState<boolean | undefined>(undefined);
+  const [inTime, setInTime] = useState<boolean | undefined>(undefined);
   
 
 useEffect(() => {
@@ -57,6 +57,7 @@ return (
     <p style={{ marginBottom: "16px", color: "#555"}}>
       {emprunts.length} emprunt{emprunts.length > 1 ? "s" : ""} réalisé{emprunts.length > 1 ? "s" : ""}
     </p>
+    <SelectEmprunts onFiltreBorrowed={setInTime} filtreBorrowed={inTime}/>
     {emprunts.length === 0 ? (
       <p>Aucun emprunt réalisé</p>
     ) : (
