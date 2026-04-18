@@ -55,7 +55,7 @@ return (
   <div>
     <h1>Gestionnaire des emprunts</h1>
     <p style={{ marginBottom: "16px", color: "#555"}}>
-      {emprunts.length} emprunt{emprunts.length > 1 ? "s" : ""} réalisé{emprunts.length > 1 ? "s" : ""} .
+      {emprunts.length} emprunt{emprunts.length > 1 ? "s" : ""} réalisé{emprunts.length > 1 ? "s" : ""}
     </p>
     {emprunts.length === 0 ? (
       <p>Aucun emprunt réalisé</p>
