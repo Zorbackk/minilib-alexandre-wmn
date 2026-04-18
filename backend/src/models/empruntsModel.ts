@@ -24,7 +24,15 @@ export const findAllNonReturned = async () : Promise<Emprunt[]> => {
 * @returns {Promise<Array>} Retourne tous les emprunts listés
 */
 export const findAll = async () : Promise<Emprunt[]> => {
-  const result = await pool.query(`SELECT * FROM emprunts ORDER BY date_emprunt ASC`);
+  const result = await pool.query(`
+    SELECT e.*,
+    l.titre as titre_livre,
+    a.nom || ' ' || a.prenom AS nom_adherent,
+    e.date_retour_effective IS NULL AND e.date_retour_prevue < CURRENT_DATE AS en_retard
+    FROM emprunts e
+    JOIN livres l ON e.livre_id = l.id
+    JOIN adherents a ON e.adherent_id = a.id
+    ORDER BY e.date_emprunt ASC`);
   return result.rows;
 };
 
