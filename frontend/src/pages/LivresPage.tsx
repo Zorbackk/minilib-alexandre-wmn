@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import type { Livre } from "../types";
 import { getLivres } from "../services/livreService";
+import { LivreForm } from "../components/forms/LivreForm";
 import LivreCard from "../components/cards/LivreCard";
 import SearchBarLivres from "../components/searchingComponents/SearchBarLivres";
 import './Spinner.css'
@@ -16,6 +17,9 @@ function LivresPage() {
   const [recherche, setRecherche] = useState<string>("");
   // undefined = pas de filtre (tous les livres), true = disponibles, false = empruntés
   const [disponible, setDisponible] = useState<boolean | undefined>(undefined);
+  // Gestion de l'ouverture ou non du modal
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [livreSelectionne, setLivreSelectionne] = useState<Livre | null>(null)
 
   useEffect(() => {
 // useEffect ne peut pas être async directement → fonction interne async
