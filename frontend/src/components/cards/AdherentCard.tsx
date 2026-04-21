@@ -5,9 +5,11 @@ interface AdherentCardProps {
   // Bonne pratique
   // Les props d'un composant React ne doivent pas être modifiées par le composant qui les reçoit
   readonly adherent: Adherent;
+  readonly onDelete: (id: number) => void; // suppression d'un adhérent selon son id
+  readonly onEdit: (adherent: Adherent) => void; // modification d'un adhérent via l'objet
 }
 
-function AdherentCard({ adherent }: AdherentCardProps) {
+function AdherentCard({ adherent, onDelete, onEdit }: AdherentCardProps) {
   return (
     <div
       style={{
@@ -39,6 +41,8 @@ function AdherentCard({ adherent }: AdherentCardProps) {
         {/*Opérateur ternaire : SI actif est TRUE alors vert SINON rouge*/}
         {adherent.actif ? "Actif" : "Inactif"}
       </span>
+      <button onClick={() => onEdit(adherent)}>Modifier</button>
+      <button onClick={() => onDelete(adherent.id)}>Supprimer</button>
     </div>
   );
 }

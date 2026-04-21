@@ -28,7 +28,7 @@ export async function updateAdherent(
   id: number,
   data: UpdateAdherentDto,
 ): Promise<Adherent> {
-  return apiRequest<Adherent>(`adherents/${id}`, {
+  return apiRequest<Adherent>(`/adherents/${id}`, {
     method: "PUT",
     body: JSON.stringify(data),
   });

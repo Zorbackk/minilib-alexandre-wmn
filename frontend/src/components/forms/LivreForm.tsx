@@ -18,6 +18,7 @@ interface LivreFormProps {
 }
 
 // On destructure soit l'objet à modifier (livre) soit la fonction à appeler lors de la création
+// Ainsi que les autres fonctions des props
 export function LivreForm({ livre, createLivre, updateLivre }: LivreFormProps) {
   // Afin de prévoir le cas de création ou de modification le useState prends les deux cas en possibilités
   // Lire : isbn: si Livre alors on prends la valeur de la propriété cherchée dans le form sinon une chaine vide (cas de la création)
