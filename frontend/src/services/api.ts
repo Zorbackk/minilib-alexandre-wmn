@@ -20,8 +20,7 @@ export interface ApiError {
  * @param options Options fetch natives (method, body, headers...)
  * @returns Réponse parsée en JSON, typée T
  */
-export async function apiRequest<T>
-(
+export async function apiRequest<T>(
   endpoint: string,
   options?: RequestInit,
 ): Promise<T> {

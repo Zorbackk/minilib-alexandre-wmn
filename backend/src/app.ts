@@ -3,14 +3,14 @@
 // Point d'entrée du serveur Express MiniLib
 // Démarre avec : npm run dev
 
-import express, { ErrorRequestHandler} from 'express';
-import cors from 'cors';
+import express, { ErrorRequestHandler } from "express";
+import cors from "cors";
 // Node 24 : plus de dotenv // Charge les variables depuis .env
 
 // Import des routeurs (on les créera juste après)
-import livresRouter from './routes/livres.js';
-import adherentsRouter from './routes/adherents.js'
-import empruntsRouter from './routes/emprunts.js'
+import livresRouter from "./routes/livres.js";
+import adherentsRouter from "./routes/adherents.js";
+import empruntsRouter from "./routes/emprunts.js";
 
 // Initialisation de l'application Express---------------------------------------------------
 const app = express();
@@ -31,19 +31,19 @@ app.use((req, res, next) => {
 
 // Routes -------------------------------------------------------------------------------------
 // Toutes les routes de livres seront préfixées par /api/v1/livres
-app.use('/api/v1/livres', livresRouter);
+app.use("/api/v1/livres", livresRouter);
 
 // Toutes les routes des adhérents seront préfixées par /api/v1/adherents
-app.use('/api/v1/adherents', adherentsRouter);
+app.use("/api/v1/adherents", adherentsRouter);
 
 // Toutes les routes des emprunts seront préfixées par /api/v1/emprunts
-app.use('/api/v1/emprunts', empruntsRouter);
+app.use("/api/v1/emprunts", empruntsRouter);
 
 // Route de santé - permet de vérifier que le serveur tourne
-app.get('/api/v1/health', (req, res) => {
+app.get("/api/v1/health", (req, res) => {
   res.json({
-    status: 'OK',
-    message: 'Serveur MiniLib opérationnel',
+    status: "OK",
+    message: "Serveur MiniLib opérationnel",
     timestamp: new Date().toISOString(),
   });
 });
@@ -51,24 +51,24 @@ app.get('/api/v1/health', (req, res) => {
 // Middleware de gestion des routes inconnues (404)
 app.use((req, res) => {
   res.status(404).json({
-    erreur: `Route ${req.method} ${req.url} non trouvée`
+    erreur: `Route ${req.method} ${req.url} non trouvée`,
   });
 });
 
 // Middleware de gestion des erreurs serveur (500)
 // Express reconnaît ce middleware à ses 4 paramètres (err en premier)
 app.use(((err, req, res, next) => {
-  console.error('Erreur serveur:', err.message);
-  res.status(500).json({erreur: 'Erreur interne du serveur'});
+  console.error("Erreur serveur:", err.message);
+  res.status(500).json({ erreur: "Erreur interne du serveur" });
 }) as ErrorRequestHandler);
 
 // Middleware errorHandler global
 // Express reconnaît ce middleware à ses 4 paramètres (err, req, res, next)
 app.use(((err, req, res, next) => {
   const status = err.statusCode || 500;
-  const message = status === 500 ? 'Erreur interne du serveur' : err.message;
-  if (status === 500) console.error('[ERREUR]', err.message);
-  res.status(status).json({erreur: message});
+  const message = status === 500 ? "Erreur interne du serveur" : err.message;
+  if (status === 500) console.error("[ERREUR]", err.message);
+  res.status(status).json({ erreur: message });
 }) as ErrorRequestHandler);
 
 // Démarrage ---------------------------------------------------------------------------------
