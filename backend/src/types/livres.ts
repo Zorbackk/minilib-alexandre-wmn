@@ -26,6 +26,17 @@ export interface CreateLivreDto {
 }
 
 /** 
+* Données pour mettre un jour un livre - sans isbn car contrainte unique « livres_isbn_key »
+*/
+export interface UpdateLivreDto {
+  titre: string;
+  auteur: string; 
+  annee?: number; // ? peut être undefined
+  genre?: string;
+}
+
+
+/** 
 * Filtres optionnels pour la liste des livres. 
 */
 export interface FiltresLivre {

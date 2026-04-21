@@ -1,10 +1,11 @@
 // frontend/src/pages/LivresPage.tsx
 import { useState, useEffect, useCallback } from "react";
-import type { CreateLivreDto, Livre } from "../types";
+import type { CreateLivreDto, Livre, UpdateLivreDto } from "../types";
 import {
   creerLivre,
   getLivres,
   supprimerLivre,
+  modifierLivre
 } from "../services/livreService";
 import { LivreForm } from "../components/forms/LivreForm";
 import LivreCard from "../components/cards/LivreCard";
@@ -80,6 +81,14 @@ function LivresPage() {
     setIsOpen(false); // Ferme modal
   };
 
+  // Fonction pour modifier un livre, utilise la méthode du service
+  // Rafraîchissement via fetchData, callBack du useEffect
+  const handleUpdate = async (id: number, data: UpdateLivreDto) => {
+    await modifierLivre(id, data);
+    fetchData(); // Rafraîchit la liste
+    setIsOpen(false); // Ferme modal
+  };
+
   // Rendu conditionnel -----------------------------
   if (chargement) {
     return <p className="loader"></p>;
@@ -136,8 +145,9 @@ function LivresPage() {
         ))
       )}
       {isOpen && (
-        <LivreForm livre={livreSelectionne} createLivre={handleCreate} />
+        <LivreForm livre={livreSelectionne} createLivre={handleCreate} updateLivre={(data) => handleUpdate(livreSelectionne!.id, data)}/>
       )}
+      {/* updateLivre: enveloppé pour passer l'id depuis livreSelectionne / ! indique non null à TS*/}
     </div>
   );
 }

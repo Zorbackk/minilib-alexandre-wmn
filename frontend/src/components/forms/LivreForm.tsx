@@ -1,9 +1,8 @@
 // frontend/src/components/forms/LivreForm.tsx
 // Formulaire qui va gérer CREATE et UPDATE des livres
 
-import type { Livre, CreateLivreDto } from "../../types";
+import type { Livre, CreateLivreDto, UpdateLivreDto } from "../../types";
 import { useState } from "react";
-
 
 interface LivreFormProps {
   // Bonne pratique
@@ -14,10 +13,12 @@ interface LivreFormProps {
 
   // Fonction à passer lors de la soumission du formulaire
   readonly createLivre: (data: CreateLivreDto) => void;
+
+  readonly updateLivre?: (data: UpdateLivreDto) => void;
 }
 
 // On destructure soit l'objet à modifier (livre) soit la fonction à appeler lors de la création
-export function LivreForm({ livre, createLivre }: LivreFormProps) {
+export function LivreForm({ livre, createLivre, updateLivre }: LivreFormProps) {
   // Afin de prévoir le cas de création ou de modification le useState prends les deux cas en possibilités
   // Lire : isbn: si Livre alors on prends la valeur de la propriété cherchée dans le form sinon une chaine vide (cas de la création)
   const [formData, setFormData] = useState({
@@ -31,14 +32,24 @@ export function LivreForm({ livre, createLivre }: LivreFormProps) {
   function handleSubmit(e: React.SubmitEvent) {
     // Empêche le rechargement de page par défaut du navigateur
     e.preventDefault();
-    // Transmet les données du formulaire au composant parent
-    createLivre(formData)
+
+    if (livre) {
+      // On ne sélectionne que les champs qui nous intéressent
+      const updateData = {
+        titre: formData.titre,
+        auteur: formData.auteur,
+        annee: formData.annee,
+        genre: formData.genre,
+      };
+      updateLivre?.(updateData);
+    } else {
+      // Transmet les données du formulaire au composant parent
+      createLivre(formData);
+    }
   }
 
   return (
-    <form
-    onSubmit={handleSubmit}
-    >
+    <form onSubmit={handleSubmit}>
       <label htmlFor="isbn">Entrez l'ISBN du livre</label>
       <input
         type="text"
