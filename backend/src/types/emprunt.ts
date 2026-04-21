@@ -1,9 +1,9 @@
 // backend/src/types/emprunt.ts
 
-/** 
-* Représente un emprunt dans le catalogue MiniLib
-* Correspond à la table emprunts dans PostgreSQL 
-*/
+/**
+ * Représente un emprunt dans le catalogue MiniLib
+ * Correspond à la table emprunts dans PostgreSQL
+ */
 export interface Emprunt {
   id: number;
   livre_id: number;
@@ -20,9 +20,9 @@ export interface EmpruntAvecDetails extends Emprunt {
   en_retard: boolean;
 }
 
-/** 
-* Données pour créer un emprunt - sans id (SERIAL dans PostgreSQL) ni dates
-*/
+/**
+ * Données pour créer un emprunt - sans id (SERIAL dans PostgreSQL) ni dates
+ */
 export interface CreateEmpruntDto {
   livre_id: number;
   adherent_id: number;

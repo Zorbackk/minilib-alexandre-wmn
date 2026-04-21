@@ -21,3 +21,11 @@ export interface CreateAdherentDto {
   prenom: string;
   email: string;
 }
+
+// Données pour modifier un adherent - sans id (SERIAL dans PostgreSQL) ni actif et created_at
+// Les données non présentes dans le Dto sont générées
+export interface UpdateAdherentDto {
+  nom: string;
+  prenom: string;
+  email: string
+}

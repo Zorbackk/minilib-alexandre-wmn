@@ -5,7 +5,7 @@ import {
   creerLivre,
   getLivres,
   supprimerLivre,
-  modifierLivre
+  modifierLivre,
 } from "../services/livreService";
 import { LivreForm } from "../components/forms/LivreForm";
 import LivreCard from "../components/cards/LivreCard";
@@ -145,7 +145,11 @@ function LivresPage() {
         ))
       )}
       {isOpen && (
-        <LivreForm livre={livreSelectionne} createLivre={handleCreate} updateLivre={(data) => handleUpdate(livreSelectionne!.id, data)}/>
+        <LivreForm
+          livre={livreSelectionne}
+          createLivre={handleCreate}
+          updateLivre={(data) => handleUpdate(livreSelectionne!.id, data)}
+        />
       )}
       {/* updateLivre: enveloppé pour passer l'id depuis livreSelectionne / ! indique non null à TS*/}
     </div>

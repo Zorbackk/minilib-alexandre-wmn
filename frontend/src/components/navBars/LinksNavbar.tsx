@@ -1,5 +1,5 @@
 // frontend/src/components/navBars/LinksNavbar
-// Composant permettant de naviguer entre les différentes sections 
+// Composant permettant de naviguer entre les différentes sections
 // de l'application
 import { NavLink } from "react-router";
 
