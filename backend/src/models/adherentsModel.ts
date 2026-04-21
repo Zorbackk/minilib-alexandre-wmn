@@ -6,7 +6,7 @@
 
 import pool from '../config/database.js'
 
-import {Adherent, CreateAdherentDto} from '../types/index.js'
+import {Adherent, CreateAdherentDto, UpdateAdherentDto} from '../types/index.js'
 
 /** 
 * Génère un numéro adhérent unique au format ADH-XXX.
@@ -56,6 +56,29 @@ export const create = async ({nom, prenom, email} : CreateAdherentDto) : Promise
   );
   return result.rows[0];
 };
+
+/** 
+* Met à jour un adhérent
+* @async
+* @param {number} id
+* @param {Object} data - Champs à modifier
+* @param {Promise<Object|null>} - Adhérent mis à jour ou null
+*/
+export const updateAdherent = async (id: number, data : Partial<UpdateAdherentDto>) : Promise<Adherent | null> => {
+  const champs = Object.keys(data);
+  const valeurs = Object.values(data);
+  if (champs.length === 0) return findById(id);
+
+  const setClause = champs.map((c, i) => `${c} = $${i + 1}`).join(', ');
+  const result = await pool.query(
+    `
+    
+    UPDATE adherents SET ${setClause} WHERE id = $${champs.length + 1} RETURNING *`, 
+    [...valeurs, id]
+  );
+  return result.rows[0] || null;
+}
+
 
 /** 
 * Désactive un adhérent (soft delete - on ne supprime jamais en BDD)

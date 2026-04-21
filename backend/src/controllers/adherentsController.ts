@@ -29,6 +29,16 @@ export const createAdherent : RequestHandler = async (req, res) => {
   res.status(201).json(nouveau);
 };
 
+/** PUT /api/v1/adherents */
+export const updateAdherent : RequestHandler = async (req, res) => {
+  const id = Number.parseInt(req.params.id as string);
+  const misAJour = await adherentsModel.updateAdherent(id, req.body);
+  if (!misAJour) {
+    return res.status(404).json({erreur: `Adhérent id:${req.params.id} non trouvé`})
+  }
+  res.json(misAJour);
+}
+
 /** DELETE /api/v1/adherents/:id - soft delete */
 export const desactiverAdherent : RequestHandler = async (req, res) => {
   const id = Number.parseInt(req.params.id as string)

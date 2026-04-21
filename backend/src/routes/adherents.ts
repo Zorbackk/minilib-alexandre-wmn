@@ -13,6 +13,9 @@ router.get('/:id', asyncWrapper(controller.getAdherentById));
 // POST /api/v1/adherents → ajout d'un adhérent
 router.post('/', asyncWrapper(controller.createAdherent));
 
+// PUT /api/v1/livres/:id → modifier un livre
+router.put('/:id', asyncWrapper(controller.updateAdherent));
+
 // DELETE /api/v1/adherents/:id → soft delete adhérent
 router.delete('/:id', asyncWrapper(controller.desactiverAdherent));
 
