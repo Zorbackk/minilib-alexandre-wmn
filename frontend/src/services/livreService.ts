@@ -1,5 +1,5 @@
 // frontend/src/services/livreService.ts
-import type { Livre, CreateLivreDto, FiltresLivre } from "../types"
+import type { Livre, CreateLivreDto, FiltresLivre, UpdateLivreDto } from "../types"
 import { apiRequest } from "./api.ts"
 
 /** 
@@ -30,6 +30,16 @@ export async function getLivreById(id: number) : Promise<Livre> {
 export async function creerLivre(data: CreateLivreDto) : Promise<Livre> {
   return apiRequest<Livre>("/livres", {
     method: "POST",
+    body: JSON.stringify(data),
+  });
+}
+
+/** 
+* Mettre à jour un livre
+*/
+export async function modifierLivre(id: number, data: UpdateLivreDto) : Promise<Livre> {
+  return apiRequest<Livre>(`/livres/${id}`, {
+    method: "PUT",
     body: JSON.stringify(data),
   });
 }
