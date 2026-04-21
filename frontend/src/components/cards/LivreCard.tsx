@@ -5,11 +5,11 @@ interface LivreCardProps {
   // Bonne pratique
   // Les props d'un composant React ne doivent pas être modifiées par le composant qui les reçoit
   readonly livre: Livre;
-  readonly onDelete: (id: number) => void;
-  // readonly onEdit: (livre: Livre) => void;
+  readonly onDelete: (id: number) => void; // suppression d'un livre via son id
+  readonly onEdit: (livre: Livre) => void; // modification d'un livre via l'objet
 }
 
-function LivreCard({ livre, onDelete }: LivreCardProps) {
+function LivreCard({ livre, onDelete, onEdit }: LivreCardProps) {
   return (
     <div
       style={{
@@ -45,7 +45,7 @@ function LivreCard({ livre, onDelete }: LivreCardProps) {
         {/*Opérateur ternaire : SI disponible est TRUE alors vert SINON rouge*/}
         {livre.disponible ? "Disponible" : "Emprunté"}
       </span>
-      <button>Modifier</button>
+      <button onClick={() => onEdit(livre)}>Modifier</button>
       {/* Arrow fonction pour empêcher l'exécution directe*/}
       <button onClick={() => onDelete(livre.id)}>Supprimer</button>
     </div>

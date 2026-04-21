@@ -10,7 +10,7 @@ interface LivreFormProps {
   // Les props d'un composant React ne doivent pas être modifiées par le composant qui les reçoit
   // On met ? au livre car si on est en création on n'est pas OBLIGÉ de lire l'objet Livre
   // Pré-remplit les champs si modification, sinon valeurs vides (création)
-  readonly livre?: Livre;
+  readonly livre?: Livre | null;
 
   // Fonction à passer lors de la soumission du formulaire
   readonly createLivre: (data: CreateLivreDto) => void;
