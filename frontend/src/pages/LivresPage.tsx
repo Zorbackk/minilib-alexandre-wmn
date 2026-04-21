@@ -1,8 +1,8 @@
 // frontend/src/pages/LivresPage.tsx
 import { useState, useEffect } from "react";
 import type { Livre } from "../types";
-import { getLivres } from "../services/livreService";
-import { LivreForm } from "../components/forms/LivreForm";
+import { getLivres, supprimerLivre } from "../services/livreService";
+// import { LivreForm } from "../components/forms/LivreForm";
 import LivreCard from "../components/cards/LivreCard";
 import SearchBarLivres from "../components/searchingComponents/SearchBarLivres";
 import './Spinner.css'
@@ -18,8 +18,8 @@ function LivresPage() {
   // undefined = pas de filtre (tous les livres), true = disponibles, false = empruntés
   const [disponible, setDisponible] = useState<boolean | undefined>(undefined);
   // Gestion de l'ouverture ou non du modal
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [livreSelectionne, setLivreSelectionne] = useState<Livre | null>(null)
+  // const [isOpen, setIsOpen] = useState<boolean>(false);
+  // const [livreSelectionne, setLivreSelectionne] = useState<Livre | null>(null);
 
   useEffect(() => {
 // useEffect ne peut pas être async directement → fonction interne async
@@ -48,6 +48,14 @@ function LivresPage() {
   // Les deux filtres en dépendance : se re-déclenche si l'un ou l'autre change
   }, [recherche, disponible]
 )
+
+// Fonction pour supprimer un livre avec l'id en paramètre
+async function handleDelete(id: number) {
+  // Appel de la méthode de suppression depuis le service
+  await supprimerLivre(id);
+  // Met à jour l'état local en retirant le livre supprimé du tableau
+  setLivres(livres.filter(l => l.id !== id));
+}
 
 // Rendu conditionnel -----------------------------
 if (chargement) {
@@ -81,7 +89,7 @@ return (
         <p>Aucun livre dans le catalogue.</p>
       ) : (
         livres.map((livre) => (
-          <LivreCard key={livre.id} livre={livre} />
+          <LivreCard key={livre.id} livre={livre} onDelete={handleDelete}/>
         ))
       )}
   </div>
