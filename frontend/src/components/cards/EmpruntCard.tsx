@@ -5,6 +5,8 @@ interface EmpruntCardProps {
   // Bonne pratique
   // Les props d'un composant React ne doivent pas être modifiées par le composant qui les reçoit
   readonly emprunt: EmpruntAvecDetails;
+
+  readonly onDelete: (id: number) => void; // Retour d'un emprunt via son id
 }
 
 // Fonction pour définir le statut de l'emprunt
@@ -20,7 +22,7 @@ function getStatus(EmpruntAvecDetails: EmpruntAvecDetails) {
   return { label: "À rendre", backgroundColor: "#F4CA75", color: "#7B663C" };
 }
 
-function EmpruntCard({ emprunt }: EmpruntCardProps) {
+function EmpruntCard({ emprunt, onDelete }: EmpruntCardProps) {
   const statut = getStatus(emprunt);
 
   return (
@@ -64,6 +66,8 @@ function EmpruntCard({ emprunt }: EmpruntCardProps) {
         {/*La fonction est mise en constant pour appeler ses paramètres là où en as besoin*/}
         {statut.label}
       </span>
+      {/* Arrow fonction pour empêcher l'exécution directe*/}
+      <button onClick={() => onDelete(emprunt.id)}>Effectuer un retour</button>
     </div>
   );
 }

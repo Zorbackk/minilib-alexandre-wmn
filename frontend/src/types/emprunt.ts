@@ -24,6 +24,6 @@ export interface EmpruntAvecDetails extends Emprunt {
 * Données pour créer un emprunt - sans id (SERIAL dans PostgreSQL) ni dates
 */
 export interface CreateEmpruntDto {
-  livre_id: number;
-  adherent_id: number;
+  livre_id: number | null;
+  adherent_id: number | null;
 }

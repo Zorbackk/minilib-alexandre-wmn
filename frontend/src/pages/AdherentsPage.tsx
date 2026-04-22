@@ -124,6 +124,8 @@ function AdherentsPage() {
         adherent={adherentSelectionne}
         createAdherent={handleCreate}
         updateAdherent={(data) => handleUpdate(adherentSelectionne!.id, data)}
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
         />
       )}
     </div>

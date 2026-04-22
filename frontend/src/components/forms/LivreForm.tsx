@@ -1,6 +1,15 @@
 // frontend/src/components/forms/LivreForm.tsx
 // Formulaire qui va gérer CREATE et UPDATE des livres
-
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Field, FieldGroup } from "@/components/ui/field";
 import type { Livre, CreateLivreDto, UpdateLivreDto } from "../../types";
 import { useState } from "react";
 
@@ -15,11 +24,20 @@ interface LivreFormProps {
   readonly createLivre: (data: CreateLivreDto) => void;
 
   readonly updateLivre?: (data: UpdateLivreDto) => void;
+
+  readonly isOpen: boolean;
+  readonly onClose: () => void;
 }
 
 // On destructure soit l'objet à modifier (livre) soit la fonction à appeler lors de la création
 // Ainsi que les autres fonctions des props
-export function LivreForm({ livre, createLivre, updateLivre }: LivreFormProps) {
+export function LivreForm({
+  livre,
+  createLivre,
+  updateLivre,
+  isOpen,
+  onClose,
+}: LivreFormProps) {
   // Afin de prévoir le cas de création ou de modification le useState prends les deux cas en possibilités
   // Lire : isbn: si Livre alors on prends la valeur de la propriété cherchée dans le form sinon une chaine vide (cas de la création)
   const [formData, setFormData] = useState({
@@ -50,52 +68,84 @@ export function LivreForm({ livre, createLivre, updateLivre }: LivreFormProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <label htmlFor="isbn">Entrez l'ISBN du livre</label>
-      <input
-        type="text"
-        id="isbn"
-        value={formData.isbn}
-        onChange={(e) => setFormData({ ...formData, isbn: e.target.value })}
-        required
-      />
-      <label htmlFor="titre">Entrez le titre du livre</label>
-      <input
-        type="text"
-        id="titre"
-        value={formData.titre}
-        onChange={(e) => setFormData({ ...formData, titre: e.target.value })}
-        required
-      />
-      <label htmlFor="auteur">Renseignez l'auteur du livre</label>
-      <input
-        type="text"
-        id="auteur"
-        value={formData.auteur}
-        onChange={(e) => setFormData({ ...formData, auteur: e.target.value })}
-        required
-      />
-      <label htmlFor="annee">Indiquez l'année de sortie</label>
-      <input
-        type="number"
-        id="annee"
-        value={formData.annee}
-        onChange={(e) =>
-          setFormData({
-            ...formData,
-            annee: e.target.value ? Number.parseInt(e.target.value) : undefined,
-          })
-        }
-      />
-      <label htmlFor="genre">Renseignez le genre du livre</label>
-      <input
-        type="text"
-        id="genre"
-        value={formData.genre}
-        onChange={(e) => setFormData({ ...formData, genre: e.target.value })}
-      />
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <form onSubmit={handleSubmit}>
+        <DialogContent className="sm:max-w-sm">
+          <DialogHeader>
+            <DialogTitle>
+              {livre ? "Modifier le livre" : "Ajouter un livre"}
+            </DialogTitle>
+                        <DialogDescription>Veuillez remplir les champs</DialogDescription>
 
-      <input type="submit" value="Valider" />
-    </form>
+          </DialogHeader>
+          <FieldGroup>
+            <Field>
+              <Label htmlFor="isbn">Entrez l'ISBN du livre</Label>
+              <Input
+                type="text"
+                id="isbn"
+                value={formData.isbn}
+                onChange={(e) =>
+                  setFormData({ ...formData, isbn: e.target.value })
+                }
+                required
+              />
+            </Field>
+            <Field>
+              <Label htmlFor="titre">Entrez le titre du livre</Label>
+              <Input
+                type="text"
+                id="titre"
+                value={formData.titre}
+                onChange={(e) =>
+                  setFormData({ ...formData, titre: e.target.value })
+                }
+                required
+              />
+            </Field>
+            <Field>
+              <Label htmlFor="auteur">Renseignez l'auteur du livre</Label>
+              <Input
+                type="text"
+                id="auteur"
+                value={formData.auteur}
+                onChange={(e) =>
+                  setFormData({ ...formData, auteur: e.target.value })
+                }
+                required
+              />
+            </Field>
+            <Field>
+              <Label htmlFor="annee">Indiquez l'année de sortie</Label>
+              <Input
+                type="number"
+                id="annee"
+                value={formData.annee}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    annee: e.target.value
+                      ? Number.parseInt(e.target.value)
+                      : undefined,
+                  })
+                }
+              />
+            </Field>
+            <Field>
+              <Label htmlFor="genre">Renseignez le genre du livre</Label>
+              <Input
+                type="text"
+                id="genre"
+                value={formData.genre}
+                onChange={(e) =>
+                  setFormData({ ...formData, genre: e.target.value })
+                }
+              />
+              <Input type="submit" value="Valider" />
+            </Field>
+          </FieldGroup>
+        </DialogContent>
+      </form>
+    </Dialog>
   );
 }
