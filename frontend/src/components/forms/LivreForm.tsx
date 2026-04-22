@@ -5,6 +5,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogDescription
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -74,6 +75,8 @@ export function LivreForm({
             <DialogTitle>
               {livre ? "Modifier le livre" : "Ajouter un livre"}
             </DialogTitle>
+                        <DialogDescription>Veuillez remplir les champs</DialogDescription>
+
           </DialogHeader>
           <FieldGroup>
             <Field>
@@ -87,8 +90,8 @@ export function LivreForm({
                 }
                 required
               />
-              </Field>
-              <Field>
+            </Field>
+            <Field>
               <Label htmlFor="titre">Entrez le titre du livre</Label>
               <Input
                 type="text"
@@ -99,8 +102,8 @@ export function LivreForm({
                 }
                 required
               />
-              </Field>
-              <Field>
+            </Field>
+            <Field>
               <Label htmlFor="auteur">Renseignez l'auteur du livre</Label>
               <Input
                 type="text"
@@ -111,8 +114,8 @@ export function LivreForm({
                 }
                 required
               />
-              </Field>
-              <Field>
+            </Field>
+            <Field>
               <Label htmlFor="annee">Indiquez l'année de sortie</Label>
               <Input
                 type="number"
@@ -127,8 +130,8 @@ export function LivreForm({
                   })
                 }
               />
-              </Field>
-              <Field>
+            </Field>
+            <Field>
               <Label htmlFor="genre">Renseignez le genre du livre</Label>
               <Input
                 type="text"
