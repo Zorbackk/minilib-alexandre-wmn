@@ -149,6 +149,8 @@ function LivresPage() {
           livre={livreSelectionne}
           createLivre={handleCreate}
           updateLivre={(data) => handleUpdate(livreSelectionne!.id, data)}
+          isOpen={isOpen}
+          onClose={() => setIsOpen(false)}
         />
       )}
       {/* updateLivre: enveloppé pour passer l'id depuis livreSelectionne / ! indique non null à TS*/}
