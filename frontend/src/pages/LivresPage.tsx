@@ -10,6 +10,8 @@ import {
 import { LivreForm } from "../components/forms/LivreForm";
 import LivreCard from "../components/cards/LivreCard";
 import SearchBarLivres from "../components/searchingComponents/SearchBarLivres";
+import { Plus } from "lucide-react";
+import { Button } from "../components/ui/button";
 import "./Spinner.css";
 
 function LivresPage() {
@@ -94,22 +96,39 @@ function LivresPage() {
     return <p className="loader"></p>;
   }
 
-  if (erreur) {
+if (erreur) {
     return (
-      <div>
-        <p style={{ color: "red" }}> Erreur : {erreur}</p>
-        <p>Vérifiez que le backend tourne sur http://localhost:5000</p>
+      <div className="rounded-lg border border-destructive/30 bg-destructive/5 p-4 text-destructive">
+        <p className="font-medium">Erreur : {erreur}</p>
+        <p className="text-sm mt-1 text-muted-foreground">
+          Vérifiez que le backend tourne sur http://localhost:5000
+        </p>
       </div>
     );
   }
 
   return (
-    <div>
-      <h1>Catalogue de livres</h1>
-      <p style={{ marginBottom: "16px", color: "#555" }}>
-        {livres.length} livre{livres.length > 1 ? "s" : ""} dans la
-        bibliothèque.
-      </p>
+    <div className="flex flex-col gap-6">
+      <div className="flex items-start justify-between">
+        <div>
+          <h1 className="text-2xl font-semibold text-foreground">
+            Catalogue de livres
+          </h1>
+          <p className="text-sm text-muted-foreground mt-1">
+            {livres.length} livre{livres.length > 1 ? "s" : ""} dans la
+            bibliothèque.
+          </p>
+        </div>
+        <Button
+          onClick={() => {
+            setLivreSelectionne(null); // Assure le mode création
+            setIsOpen(true); // Ouvre modal
+          }}
+        >
+          <Plus />
+          Créer un livre
+        </Button>
+      </div>
       {/* On passe les props du composant enfant ici afin d'activer la recherche */}
       {/*
       onRecherche : callback appelé à chaque frappe — met à jour l'état `recherche` (filtre par titre/auteur)
@@ -124,26 +143,22 @@ function LivresPage() {
         onFiltreDisponible={setDisponible}
         filtreDisponible={disponible}
       />
-      <button
-        onClick={() => {
-          setLivreSelectionne(null); // Assure le mode création
-          setIsOpen(true); // Ouvre modal
-        }}
-      >
-        Créer un livre
-      </button>
+
       {livres.length === 0 ? (
-        <p>Aucun livre dans le catalogue.</p>
+        <p className="text-muted-foreground">Aucun livre dans le catalogue.</p>
       ) : (
-        livres.map((livre) => (
-          <LivreCard
-            key={livre.id}
-            livre={livre}
-            onDelete={handleDelete}
-            onEdit={handleEdit}
-          />
-        ))
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {livres.map((livre) => (
+            <LivreCard
+              key={livre.id}
+              livre={livre}
+              onDelete={handleDelete}
+              onEdit={handleEdit}
+            />
+          ))}
+        </div>
       )}
+
       {isOpen && (
         <LivreForm
           livre={livreSelectionne}

@@ -58,13 +58,13 @@ export function AdherentForm({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <form onSubmit={handleSubmit}>
-        <DialogContent className="sm:max-w-sm">
-          <DialogHeader>
-            <DialogTitle>
-              {adherent ? "Modifier l'adhérent" : "Ajouter un adhérent"}
-            </DialogTitle>
-          </DialogHeader>
+      <DialogContent className="sm:max-w-sm bg-primary-foreground">
+        <DialogHeader>
+          <DialogTitle>
+            {adherent ? "Modifier l'adhérent" : "Ajouter un adhérent"}
+          </DialogTitle>
+        </DialogHeader>
+        <form onSubmit={handleSubmit}>
           <FieldGroup>
             <Field>
               <Label htmlFor="prenom">Entrez le prénom de l'adhérent</Label>
@@ -104,8 +104,8 @@ export function AdherentForm({
               <input type="submit" value="Valider" />
             </Field>
           </FieldGroup>
-        </DialogContent>
-      </form>
+        </form>
+      </DialogContent>
     </Dialog>
   );
 }

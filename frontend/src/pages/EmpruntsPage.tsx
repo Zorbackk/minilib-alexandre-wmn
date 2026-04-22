@@ -17,6 +17,8 @@ import {
 import EmpruntCard from "../components/cards/EmpruntCard";
 import SelectEmprunts from "../components/searchingComponents/SelectEmprunts";
 import "./Spinner.css";
+import { Plus } from "lucide-react";
+import { Button } from "../components/ui/button";
 import { EmpruntForm } from "@/components/forms/EmpruntForm";
 import { getAdherents } from "@/services/adherentService";
 import { getLivres } from "@/services/livreService";
@@ -111,41 +113,45 @@ function EmpruntsPage() {
     return <p className="loader"></p>;
   }
 
-  if (erreur) {
+ if (erreur) {
     return (
-      <div>
-        <p style={{ color: "red" }}> Erreur : {erreur}</p>
-        <p>Vérifiez que le backend tourne sur http://localhost:5000</p>
+      <div className="rounded-lg border border-destructive/30 bg-destructive/5 p-4 text-destructive">
+        <p className="font-medium">Erreur : {erreur}</p>
+        <p className="text-sm mt-1 text-muted-foreground">
+          Vérifiez que le backend tourne sur http://localhost:5000
+        </p>
       </div>
     );
   }
 
   return (
-    <div>
-      <h1>Gestionnaire des emprunts</h1>
-      <p style={{ marginBottom: "16px", color: "#555" }}>
-        {emprunts.length} emprunt{emprunts.length > 1 ? "s" : ""} réalisé
-        {emprunts.length > 1 ? "s" : ""}
-      </p>
-      <button
-        onClick={() => {
-          setIsOpen(true); // Ouvre modal
-        }}
-      >
-        Réaliser un emprunt
-      </button>
-      <SelectEmprunts onFiltreBorrowed={setInTime} filtreBorrowed={inTime} />
+    <div className="flex flex-col gap-6">
+      <div className="flex items-start justify-between">
+        <div>
+          <h1 className="text-2xl font-semibold text-foreground">Gestionnaire des emprunts</h1>
+          <p className="text-sm text-muted-foreground mt-1">
+            {emprunts.length} emprunt{emprunts.length > 1 ? "s" : ""} réalisé{emprunts.length > 1 ? "s" : ""}.
+          </p>
+        </div>
+        <div className="flex items-center gap-3">
+          <SelectEmprunts onFiltreBorrowed={setInTime} filtreBorrowed={inTime} />
+          <Button onClick={() => setIsOpen(true)}>
+            <Plus />
+            Réaliser un emprunt
+          </Button>
+        </div>
+      </div>
+
       {emprunts.length === 0 ? (
-        <p>Aucun emprunt réalisé</p>
+        <p className="text-muted-foreground">Aucun emprunt réalisé.</p>
       ) : (
-        emprunts.map((emprunt) => (
-          <EmpruntCard
-            key={emprunt.id}
-            emprunt={emprunt}
-            onDelete={handleDelete}
-          />
-        ))
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {emprunts.map((emprunt) => (
+            <EmpruntCard key={emprunt.id} emprunt={emprunt} onDelete={handleDelete} />
+          ))}
+        </div>
       )}
+
       {isOpen && (
         <EmpruntForm
           livre={livres}

@@ -5,7 +5,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogDescription
+  DialogDescription,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -69,15 +69,14 @@ export function LivreForm({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <form onSubmit={handleSubmit}>
-        <DialogContent className="sm:max-w-sm">
-          <DialogHeader>
-            <DialogTitle>
-              {livre ? "Modifier le livre" : "Ajouter un livre"}
-            </DialogTitle>
-                        <DialogDescription>Veuillez remplir les champs</DialogDescription>
-
-          </DialogHeader>
+      <DialogContent className="sm:max-w-sm bg-primary-foreground">
+        <DialogHeader>
+          <DialogTitle>
+            {livre ? "Modifier le livre" : "Ajouter un livre"}
+          </DialogTitle>
+          <DialogDescription>Veuillez remplir les champs</DialogDescription>
+        </DialogHeader>
+        <form onSubmit={handleSubmit}>
           <FieldGroup>
             <Field>
               <Label htmlFor="isbn">Entrez l'ISBN du livre</Label>
@@ -144,8 +143,8 @@ export function LivreForm({
               <Input type="submit" value="Valider" />
             </Field>
           </FieldGroup>
-        </DialogContent>
-      </form>
+        </form>
+      </DialogContent>
     </Dialog>
   );
 }

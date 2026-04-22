@@ -1,4 +1,6 @@
 // frontend/src/components/LivreCard.tsx
+import { Pencil, Trash2 } from "lucide-react";
+import { Button } from "../ui/button";
 import type { Livre } from "../../types";
 
 interface LivreCardProps {
@@ -11,43 +13,37 @@ interface LivreCardProps {
 
 function LivreCard({ livre, onDelete, onEdit }: LivreCardProps) {
   return (
-    <div
-      style={{
-        border: "1px solid #ddd",
-        borderRadius: "6px",
-        padding: "16px",
-        backgroundColor: "#fff",
-        marginBottom: "12px",
-      }}
-    >
-      <h3 style={{ marginBottom: "4px" }}>{livre.titre}</h3>
-      <p style={{ color: "#555", fontSize: "14px" }}>
-        {livre.auteur}
-        {livre.annee ? `- ${livre.annee}` : ""}
-      </p>
-      {/*Rendu conditionnel - Genre peut être optionnel on s'assure donc de son existence avant d'afficher le p*/}
-      {livre.genre && (
-        <p style={{ fontSize: "13px", color: "#888" }}>{livre.genre}</p>
-      )}
-      <span
-        style={{
-          display: "inline-block",
-          marginTop: "8px",
-          padding: "2px 10px",
-          borderRadius: "12px",
-          fontSize: "13px",
-          fontWeight: "bold",
-          backgroundColor: livre.disponible ? "#E8F5E9" : "#FFEBEE",
-          color: livre.disponible ? "#1B5E20" : "#B71C1C",
-        }}
-      >
-        {" "}
-        {/*Opérateur ternaire : SI disponible est TRUE alors vert SINON rouge*/}
-        {livre.disponible ? "Disponible" : "Emprunté"}
-      </span>
-      <button onClick={() => onEdit(livre)}>Modifier</button>
-      {/* Arrow fonction pour empêcher l'exécution directe*/}
-      <button onClick={() => onDelete(livre.id)}>Supprimer</button>
+    <div className="bg-card border border-border rounded-lg p-4 shadow-sm flex flex-col gap-2">
+      <div className="flex items-start justify-between gap-2">
+        <div className="flex flex-col gap-0.5">
+          <h3 className="font-semibold text-foreground">{livre.titre}</h3>
+          <p className="text-sm text-muted-foreground">
+            {livre.auteur}{livre.annee ? ` — ${livre.annee}` : ""}
+          </p>
+          {livre.genre && (
+            <p className="text-xs text-muted-foreground">{livre.genre}</p>
+          )}
+        </div>
+        {/*Opérateur ternaire : SI actif est TRUE alors vert SINON rouge*/}
+        <span className={`shrink-0 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${
+          livre.disponible
+            ? "bg-green-50 text-green-700 border-green-200"
+            : "bg-red-50 text-red-700 border-red-200"
+        }`}>
+          {livre.disponible ? "Disponible" : "Emprunté"}
+        </span>
+      </div>
+      <div className="flex gap-2 justify-end pt-1">
+        <Button variant="outline" size="sm" onClick={() => onEdit(livre)}>
+          <Pencil />
+          Modifier
+        </Button>
+        {/* Arrow fonction pour empêcher l'exécution directe*/}
+        <Button variant="destructive" size="sm" onClick={() => onDelete(livre.id)}>
+          <Trash2 />
+          Supprimer
+        </Button>
+      </div>
     </div>
   );
 }

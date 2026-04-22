@@ -34,6 +34,7 @@ function SelectEmprunts({
         onChange={(e) => {
           onFiltreBorrowed(isOnTime(e.target.value));
         }}
+        className="h-8 rounded-md border border-input bg-background px-3 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-ring"
       >
         <option value="tous">Tous</option>
         <option value="true">Non-rendus</option>
