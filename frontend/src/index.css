@@ -1,5 +1,8 @@
 /* frontend/src/index.css - reset minimal */
 
+/* Import global de tailwindcss */
+@import "tailwindcss";
+
 /** * = sélecteur universel pour l'ensemble des éléments de la page, ici à la racine de l'app */
 *, *::before, *::after {
   box-sizing: border-box; /* padding et border sont inclus dans la hauteur/largeur déclarée */
