@@ -47,6 +47,9 @@ Alexandre **"Zorback"** Wiemann - Développeur Fullstack en formation CDA à l'A
  # Démarrer l'application complète
  docker compose up --build
 
+  # Arrêter l'application sans supprimer les containers
+ docker compose stop
+
  # Accéder à l'application 
  # Frontend : http://localhost:3000
  # API : http://localhost:5000
@@ -57,3 +60,23 @@ Alexandre **"Zorback"** Wiemann - Développeur Fullstack en formation CDA à l'A
  docker compose -f docker-compose.prod.yml up -d --build
  ```
  
+### Import des données de la base de données
+``` bash 
+pg_dump -U nom_utilisateur -d nom_bdd --data-only --inserts -f exports.sql
+
+- Attention copie faite dans le répertoire où la commande est exécutée
+
+# Placer dans le docker-compose.yml à la suite des volumes
+`./database/exports.sql:/docker-entrypoint-initdb.d/exports.sql`
+
+OU 
+
+# Pour réaliser l'import sans les triggers (constraints.sql) si des mouvements bloquants apparaissent
+`pg_dump -U <user> -d <dbname> --data-only --inserts --disable-triggers > database/exports.sql`
+
+# Drop la bdd en nettoyant les volumes
+docker compose down -v
+
+# Relance l'application complète
+docker compose up --build
+```

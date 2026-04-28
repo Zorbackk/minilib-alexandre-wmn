@@ -103,7 +103,8 @@ RETURNS TRIGGER AS $$
       RETURN NEW;
     END;
 $$
-LANGUAGE plpgsql;
+LANGUAGE plpgsql
+SET search_path = public;
 
 -- Trigger BEFORE INSERT : vérifie la limite avant chaque nouvel emprunt
 DROP TRIGGER IF EXISTS trigger_limit_emprunts_par_adherent ON emprunts;
@@ -147,7 +148,8 @@ RETURNS TRIGGER AS $$
       RETURN NEW;
     END;
 $$
-LANGUAGE plpgsql;
+LANGUAGE plpgsql
+SET search_path = public;
 
 -- Trigger BEFORE INSERT : vérifie dispo + marque indisponible en une passe
 DROP TRIGGER IF EXISTS trigger_livre_indisponible_emprunt ON emprunts;
@@ -174,7 +176,8 @@ RETURNS TRIGGER AS $$
     RETURN NEW;
   END;
 $$
-LANGUAGE plpgsql;
+LANGUAGE plpgsql
+SET search_path = public;
 
 -- Trigger BEFORE UPDATE : ne se déclenche que sur modification de date_retour_effective
 DROP TRIGGER IF EXISTS trigger_livre_disponible_retour ON emprunts;
