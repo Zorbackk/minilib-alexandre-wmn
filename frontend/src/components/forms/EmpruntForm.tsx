@@ -5,7 +5,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogDescription
+  DialogDescription,
 } from "@/components/ui/dialog";
 import {
   Select,
@@ -42,8 +42,11 @@ export function EmpruntForm({
   isOpen,
   onClose,
 }: EmpruntFormProps) {
-  const [formData, setFormData] = useState<CreateEmpruntDto>({livre_id: null, adherent_id: null})
-  
+  const [formData, setFormData] = useState<CreateEmpruntDto>({
+    livre_id: null,
+    adherent_id: null,
+  });
+
   // Fonction de soumission du formulaire avec anti-rechargement
   function handleSubmit(e: React.SubmitEvent) {
     // Empêche le rechargement de page par défaut du navigateur
@@ -53,23 +56,29 @@ export function EmpruntForm({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-        <DialogContent className="sm:max-w-sm">
-                          <form onSubmit={handleSubmit}>
-          <DialogHeader>
-            <DialogTitle>Saisir un emprunt</DialogTitle>
-            <DialogDescription>Veuillez choisir le livre emprunté puis l'adhérent</DialogDescription>
-          </DialogHeader>
+      <DialogContent className="sm:max-w-sm bg-primary-foreground">
+        <DialogHeader>
+          <DialogTitle>Saisir un emprunt</DialogTitle>
+          <DialogDescription>
+            Veuillez choisir le livre emprunté puis l'adhérent
+          </DialogDescription>
+        </DialogHeader>
+        <form onSubmit={handleSubmit}>
           <FieldGroup>
             <Field>
               <Label htmlFor="livre">Sélection du livre</Label>
               {/* On convertit les données transmises au backend en number*/}
-              <Select onValueChange={(val) => setFormData({...formData, livre_id: Number(val)})}>
+              <Select
+                onValueChange={(val) =>
+                  setFormData({ ...formData, livre_id: Number(val) })
+                }
+              >
                 <SelectTrigger className="w-full max-w-48">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent position="popper" className="bg-primary-foreground">
                   <SelectGroup>
-                    <SelectLabel>Fruits</SelectLabel>
+                    <SelectLabel>Livres</SelectLabel>
                     {/* On convertit les données transmises au formulaire en string*/}
                     {livre.map((livre) => (
                       <SelectItem key={livre.id} value={String(livre.id)}>
@@ -83,17 +92,21 @@ export function EmpruntForm({
             <Field>
               <Label htmlFor="adherent">Sélection de l'adhérent</Label>
               {/* On convertit les données transmises au backend en number*/}
-              <Select onValueChange={(val) => setFormData({...formData, adherent_id: Number(val)})}>
+              <Select
+                onValueChange={(val) =>
+                  setFormData({ ...formData, adherent_id: Number(val) })
+                }
+              >
                 <SelectTrigger className="w-full max-w-48">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent position="popper" className="bg-primary-foreground">
                   <SelectGroup>
-                    <SelectLabel>Fruits</SelectLabel>
+                    <SelectLabel>Adhérents</SelectLabel>
                     {/* On convertit les données transmises au formulaire en string*/}
                     {adherent.map((adherent) => (
                       <SelectItem key={adherent.id} value={String(adherent.id)}>
-                        {adherent.prenom}{adherent.nom}
+                        {adherent.prenom} {adherent.nom}
                       </SelectItem>
                     ))}
                   </SelectGroup>
@@ -102,9 +115,8 @@ export function EmpruntForm({
             </Field>
             <input type="submit" value="Valider" />
           </FieldGroup>
-                </form>
-        </DialogContent>
-
+        </form>
+      </DialogContent>
     </Dialog>
   );
 }

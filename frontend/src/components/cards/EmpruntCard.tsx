@@ -1,6 +1,9 @@
 // frontend/src/components/EmpruntCard.tsx
+import { Undo2 } from "lucide-react";
+import { Button } from "../ui/button";
 import type { EmpruntAvecDetails } from "../../types";
 import { formatDate } from "../../utils/formatDate.ts";
+
 interface EmpruntCardProps {
   // Bonne pratique
   // Les props d'un composant React ne doivent pas être modifiées par le composant qui les reçoit
@@ -12,62 +15,66 @@ interface EmpruntCardProps {
 // Fonction pour définir le statut de l'emprunt
 // On prend l'objet étendu pour accéder à la boolean en_retard
 // On applique directement le style par la même occasion
-function getStatus(EmpruntAvecDetails: EmpruntAvecDetails) {
-  if (EmpruntAvecDetails.date_retour_effective !== null) {
-    return { label: "Rendu", backgroundColor: "#89C99F", color: "#466651" };
+function getStatus(emprunt: EmpruntAvecDetails) {
+  if (emprunt.date_retour_effective !== null) {
+    return {
+      label: "Rendu",
+      classes: "bg-green-50 text-green-700 border-green-200",
+    };
   }
-  if (EmpruntAvecDetails.en_retard) {
-    return { label: "En retard", backgroundColor: "#FFEBEE", color: "#B71C1C" };
+  if (emprunt.en_retard) {
+    return {
+      label: "En retard",
+      classes: "bg-red-50 text-red-700 border-red-200",
+    };
   }
-  return { label: "À rendre", backgroundColor: "#F4CA75", color: "#7B663C" };
+  return {
+    label: "À rendre",
+    classes: "bg-amber-50 text-amber-700 border-amber-200",
+  };
 }
 
 function EmpruntCard({ emprunt, onDelete }: EmpruntCardProps) {
   const statut = getStatus(emprunt);
-
   return (
-    <div
-      style={{
-        border: "1px solid #ddd",
-        borderRadius: "6px",
-        padding: "16px",
-        backgroundColor: "#fff",
-        marginBottom: "12px",
-      }}
-    >
-      <h3 style={{ marginBottom: "4px" }}>
-        {/* Utilitaire de conversion de la date formatDate()*/}
-        Emprunt réalisé le {formatDate(emprunt.date_emprunt)}
-      </h3>
-      <p style={{ color: "#555", fontSize: "14px" }}>
-        {emprunt.titre_livre} par {emprunt.nom_adherent}
-      </p>
-      <p style={{ fontSize: "13px", color: "#888" }}>
-        Retour prévue le {formatDate(emprunt.date_retour_prevue)}
-      </p>
-      {emprunt.date_retour_effective !== null && (
-        <p style={{ fontSize: "13px", color: "#888" }}>
-          Retour effectué le {formatDate(emprunt.date_retour_effective)}
-        </p>
-      )}
-      <span
-        style={{
-          display: "inline-block",
-          marginTop: "8px",
-          padding: "2px 10px",
-          borderRadius: "12px",
-          fontSize: "13px",
-          fontWeight: "bold",
-          backgroundColor: statut.backgroundColor,
-          color: statut.color,
-        }}
-      >
-        {" "}
+    <div className="bg-card border border-border rounded-lg p-4 shadow-sm flex flex-col gap-2">
+      <div className="flex items-start justify-between gap-2">
+        <div className="flex flex-col gap-0.5">
+          <h3 className="font-semibold text-foreground">
+            {emprunt.titre_livre}
+          </h3>
+          <p className="text-sm text-muted-foreground">
+            par {emprunt.nom_adherent}
+          </p>
+          <p className="text-xs text-muted-foreground">
+            {/* Utilitaire de conversion de la date formatDate()*/}
+            Emprunté le {formatDate(emprunt.date_emprunt)} · Retour prévu le{" "}
+            {formatDate(emprunt.date_retour_prevue)}
+          </p>
+          {emprunt.date_retour_effective !== null && (
+            <p className="text-xs text-muted-foreground">
+              Retour effectué le {formatDate(emprunt.date_retour_effective)}
+            </p>
+          )}
+        </div>
         {/*La fonction est mise en constant pour appeler ses paramètres là où en as besoin*/}
-        {statut.label}
-      </span>
-      {/* Arrow fonction pour empêcher l'exécution directe*/}
-      <button onClick={() => onDelete(emprunt.id)}>Effectuer un retour</button>
+        <span
+          className={`shrink-0 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${statut.classes}`}
+        >
+          {statut.label}
+        </span>
+      </div>
+      <div className="flex justify-end pt-1">
+        {/* Arrow fonction pour empêcher l'exécution directe*/}
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => onDelete(emprunt.id)}
+        >
+          <Undo2 />
+          Effectuer un retour
+        </Button>
+      </div>
     </div>
   );
 }

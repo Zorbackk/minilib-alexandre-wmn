@@ -1,4 +1,6 @@
 // frontend/src/components/AdherentCard.tsx
+import { Pencil, Trash2 } from "lucide-react";
+import { Button } from "../ui/button";
 import type { Adherent } from "../../types";
 
 interface AdherentCardProps {
@@ -11,38 +13,34 @@ interface AdherentCardProps {
 
 function AdherentCard({ adherent, onDelete, onEdit }: AdherentCardProps) {
   return (
-    <div
-      style={{
-        border: "1px solid #ddd",
-        borderRadius: "6px",
-        padding: "16px",
-        backgroundColor: "#fff",
-        marginBottom: "12px",
-      }}
-    >
-      <h3 style={{ marginBottom: "4px" }}>{adherent.numero_adherent}</h3>
-      <p style={{ color: "#555", fontSize: "14px" }}>
-        {adherent.nom} {adherent.prenom}
-      </p>
-      <p style={{ fontSize: "13px", color: "#888" }}>{adherent.email}</p>
-      <span
-        style={{
-          display: "inline-block",
-          marginTop: "8px",
-          padding: "2px 10px",
-          borderRadius: "12px",
-          fontSize: "13px",
-          fontWeight: "bold",
-          backgroundColor: adherent.actif ? "#E8F5E9" : "#FFEBEE",
-          color: adherent.actif ? "#1B5E20" : "#B71C1C",
-        }}
-      >
-        {" "}
+    <div className="bg-card border border-border rounded-lg p-4 shadow-sm flex flex-col gap-2">
+      <div className="flex items-start justify-between gap-2">
+        <div className="flex flex-col gap-0.5">
+          <h3 className="font-semibold text-foreground">
+            {adherent.prenom} {adherent.nom} 
+          </h3>
+          <p className="text-sm text-muted-foreground">{adherent.email}</p>
+          <p className="text-xs text-muted-foreground">#{adherent.numero_adherent}</p>
+        </div>
         {/*Opérateur ternaire : SI actif est TRUE alors vert SINON rouge*/}
-        {adherent.actif ? "Actif" : "Inactif"}
-      </span>
-      <button onClick={() => onEdit(adherent)}>Modifier</button>
-      <button onClick={() => onDelete(adherent.id)}>Supprimer</button>
+        <span className={`shrink-0 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${
+          adherent.actif
+            ? "bg-green-50 text-green-700 border-green-200"
+            : "bg-red-50 text-red-700 border-red-200"
+        }`}>
+          {adherent.actif ? "Actif" : "Inactif"}
+        </span>
+      </div>
+      <div className="flex gap-2 justify-end pt-1">
+        <Button variant="outline" size="sm" onClick={() => onEdit(adherent)}>
+          <Pencil />
+          Modifier
+        </Button>
+        <Button variant="destructive" size="sm" onClick={() => onDelete(adherent.id)}>
+          <Trash2 />
+          Supprimer
+        </Button>
+      </div>
     </div>
   );
 }
